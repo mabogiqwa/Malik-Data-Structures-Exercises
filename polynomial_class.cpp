@@ -36,7 +36,7 @@ bool check_if_character_exists(char someChar);
 //Postcondition: Returns a true value if the following character are in the
 //cstring: ' ', '+', '-', '\0'. Or else it returns false.
 
-std::string input_string_polynomial(char polynomial[MAXSIZE]);
+void input_string_polynomial(char polynomial[MAXSIZE]);
 //Precondition: We pass an polynomial empty cstring as a formal parameter
 //Postcondition: Retrieves the polynomial input from the user.
 
@@ -63,7 +63,7 @@ int main()
     std::cout << "Program ended" << std::endl;
 }
 
-std::string input_string_polynomial(char polynomial[MAXSIZE])
+void input_string_polynomial(char polynomial[MAXSIZE])
 {
     if (polynomial[0] = '\0') { //Checks if polynomial cstring is empty
         std::cout << "Enter the polynomial: " << std::endl;
