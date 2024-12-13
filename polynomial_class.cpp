@@ -9,6 +9,7 @@
 #include <iostream>
 #include <string>
 #include <cctype>
+#include <cmath>
 #include <cstring>
 
 const int MAXSIZE = 100;
@@ -43,6 +44,10 @@ void input_string_polynomial(char polynomial[MAXSIZE]);
 void print_linked_list(NodePtr head);
 //Precondition: The list must not be empty
 //Postcondition: Prints the contents of each node in the linked list
+
+double f(double x, NodePtr& head);
+//Precondition: The linked list must be populated with the necessary values
+//Postcondition: The function returns the image of the given polynomial
 
 void deallocate_linked_list(NodePtr &head);
 //Precondition: The linked list must be not empty.
@@ -237,6 +242,22 @@ void print_linked_list(NodePtr head)
         std::cout << iter->coefficient << " " << iter->exponent << std::endl;
         i++;
     }
+}
+
+double f(double x, NodePtr& head)
+{
+    double power, total_image = 0;
+    double part_image;
+    NodePtr tempPtr;
+
+    for (tempPtr = head; tempPtr != nullptr; tempPtr = tempPtr->link)
+    {
+       power = pow(x, tempPtr->exponent);
+       part_image = (tempPtr->coefficient)*power;
+       total_image += part_image;
+    }
+
+    return total_image;
 }
 
 void deallocate_linked_list(NodePtr &head)
