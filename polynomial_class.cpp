@@ -44,10 +44,14 @@ void print_linked_list(NodePtr head);
 //Precondition: The list must not be empty
 //Postcondition: Prints the contents of each node in the linked list
 
-double f(double x, NodePtr& head);
+double f(double x, NodePtr head);
 //Precondition: The linked list must already be populated with the necessary values and the 
 //x must be a real number
 //Postcondition: The function returns the image of the given polynomial
+
+double calculate_discriminant(NodePtr head);
+//Precondition: The highest degree in the linked list(polynomial) must be 2
+//Postcondition: Returns the discriminant of the polynomial
 
 void deallocate_linked_list(NodePtr &head);
 //Precondition: The linked list must be not empty.
@@ -245,7 +249,7 @@ void print_linked_list(NodePtr head)
     }
 }
 
-double f(double x, NodePtr& head)
+double f(double x, NodePtr head)
 {
     double power, total_image = 0;
     double part_image;
@@ -259,6 +263,57 @@ double f(double x, NodePtr& head)
     }
 
     return total_image;
+}
+
+double calculate_discriminant(NodePtr head)
+{
+    //A condition must be added beforehand that
+    //allows this function to be used only when
+    //the highest degree is 2.
+    double a, b, c, discriminant;
+
+    NodePtr tempPtr = head;
+
+    if (tempPtr->exponent == 2)
+    {
+        a = tempPtr->coefficient;
+
+        if (tempPtr->link != nullptr)
+        {
+            tempPtr = tempPtr->link;
+            if (tempPtr->exponent != 0) {
+                //This is if the next term is not a constant
+                if (tempPtr->exponent > 0) {
+                    b = tempPtr->coefficient;
+                    if (tempPtr->link != nullptr)
+                    {
+                        //This is now the final term, c
+                        tempPtr = tempPtr->link;
+                        c = tempPtr->coefficient;
+                    } else {
+                        c = 0;
+                    }
+                } else {
+                    b = 0;
+                }
+            } else {
+                //This is if b does not exist, is zero.
+                if (tempPtr->exponent == 0) {
+                    c = tempPtr->coefficient;
+                    b = 0;
+                }
+                else
+                    c = 0;
+            }
+        } else {
+            b = 0;
+            c = 0;
+        }
+    }
+
+    discriminant = pow(b, 2) - 4*a*c;
+
+    return discriminant;
 }
 
 void deallocate_linked_list(NodePtr &head)
