@@ -236,3 +236,15 @@ void print_linked_list(NodePtr head)
         i++;
     }
 }
+
+void deallocate_linked_list(NodePtr &head)
+{
+   NodePtr tempPtr;
+   for (tempPtr = head; tempPtr != nullptr; tempPtr = tempPtr->link)
+   {
+      head = head->link;
+      delete tempPtr;
+      tempPtr = nullptr;
+      tempPtr = head;
+   }
+}
