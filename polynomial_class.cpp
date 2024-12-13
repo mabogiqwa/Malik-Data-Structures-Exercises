@@ -2,9 +2,7 @@
 //Author: Mabo Giqwa
 //Program Description: Stores the contents polynomial cstring
 //in a FIFO data structure
-//Constraint: Include a space before and after each - character. 
-//N.B There is something wrong with this algorithm, printing terms
-//twice.
+//The bisection method has a logical error
 #include <iostream>
 #include <string>
 #include <cctype>
