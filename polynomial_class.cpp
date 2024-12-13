@@ -133,6 +133,8 @@ Node* store_in_linked_list(NodePtr &head, NodePtr &currentNode, char polynomial[
 
         if (polynomial[index] == '+' || polynomial[index] == ' ') {
             index = index + 1; 
+            if (polynomial[index] == ' ')
+               index = index + 1;
         }
 
         if (isdigit(polynomial[index]))
@@ -198,7 +200,7 @@ Node* store_in_linked_list(NodePtr &head, NodePtr &currentNode, char polynomial[
             head->exponent = exponent_d;
             head->link = nullptr;
             currentNode = head;
-        } else {
+        } else if (numOfIterations > 1) {
             double c = (coefficient_d*currentSign);
             add_node_to_list(currentNode, c, exponent_d);
         }
