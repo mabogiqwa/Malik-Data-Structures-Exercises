@@ -60,6 +60,8 @@ int main()
 
     print_linked_list(head);
 
+    deallocate_linked_list(head);
+
     std::cout << "Program ended" << std::endl;
 }
 
@@ -247,4 +249,5 @@ void deallocate_linked_list(NodePtr &head)
       tempPtr = nullptr;
       tempPtr = head;
    }
+   head = nullptr;
 }
