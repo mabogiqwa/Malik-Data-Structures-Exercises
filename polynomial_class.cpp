@@ -49,6 +49,11 @@ double f(double x, NodePtr head);
 //x must be a real number
 //Postcondition: The function returns the image of the given polynomial
 
+std::string bisection_method(NodePtr head, double endPoint1, double endPoint2);
+//Precondition: The linked list must be populated with the necessary values
+//and the endpoints must be real numbers.
+//Postcondition: The function will return the root approximation between the interval.
+
 double calculate_discriminant(NodePtr head);
 //Precondition: The highest degree in the linked list(polynomial) must be 2
 //Postcondition: Returns the discriminant of the polynomial
@@ -314,6 +319,51 @@ double calculate_discriminant(NodePtr head)
     discriminant = pow(b, 2) - 4*a*c;
 
     return discriminant;
+}
+
+//Still buggy, to be updates
+std::string bisection_method(NodePtr head, double endPoint1, double endPoint2)
+{
+    NodePtr tempPtr = head;
+    double discriminant, tolerance, error = 0;
+    double endPointImage1, endPointImage2;
+    double rootApproximation, approximationImage;
+    std::string stringRootApproximation;
+
+    if (tempPtr->exponent == 2)
+        discriminant = calculate_discriminant(head);
+    else
+        return "No real root exists";
+
+    int iteration = 0;
+
+    while (iteration < 3)
+    {
+        rootApproximation = (endPoint1 + endPoint2)/2.0;
+        std::cout << rootApproximation << std::endl;
+
+        endPointImage1 = f(endPoint1, head);
+        endPointImage2 = f(endPoint2, head);
+
+        approximationImage = f(rootApproximation, head);
+
+        if ((endPointImage1 * approximationImage) < 0)
+        {
+            endPoint2 = rootApproximation;
+
+            error = rootApproximation - ((endPoint1 + endPoint2)/2.0);
+        } else {
+            endPoint1 = rootApproximation;
+
+            error = rootApproximation - ((endPoint1 + endPoint2)/2.0);
+        }
+        iteration++;
+    }
+
+    stringRootApproximation = std::to_string(rootApproximation);
+
+    return stringRootApproximation;
+
 }
 
 void deallocate_linked_list(NodePtr &head)
