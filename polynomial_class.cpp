@@ -46,7 +46,8 @@ void print_linked_list(NodePtr head);
 //Postcondition: Prints the contents of each node in the linked list
 
 double f(double x, NodePtr& head);
-//Precondition: The linked list must be populated with the necessary values
+//Precondition: The linked list must already be populated with the necessary values and the 
+//x must be a real number
 //Postcondition: The function returns the image of the given polynomial
 
 void deallocate_linked_list(NodePtr &head);
@@ -63,7 +64,8 @@ int main()
 
     head = store_in_linked_list(head, currentPtr, polynomial);
 
-    print_linked_list(head);
+    std::cout << f(10, head) << std::endl;
+    //print_linked_list(head);
 
     deallocate_linked_list(head);
 
