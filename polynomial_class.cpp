@@ -5,7 +5,6 @@
 //Constraint: Include a space before and after each - character. 
 //N.B There is something wrong with this algorithm, printing terms
 //twice.
-//A node for the same term is being created twice.
 #include <iostream>
 #include <string>
 #include <cctype>
