@@ -2,7 +2,7 @@
 //Author: Mabo Giqwa
 //Program Description: Stores the contents polynomial cstring
 //in a FIFO data structure
-//The bisection method has a logical error
+//The bisection method has a logical errors
 #include <iostream>
 #include <string>
 #include <cctype>
@@ -319,7 +319,7 @@ double calculate_discriminant(NodePtr head)
     return discriminant;
 }
 
-//Still buggy, to be updates
+//Still buggy, to be updated
 std::string bisection_method(NodePtr head, double endPoint1, double endPoint2)
 {
     NodePtr tempPtr = head;
