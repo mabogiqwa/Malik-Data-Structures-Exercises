@@ -353,6 +353,11 @@ void bisection_method(NodePtr head, double endPoint1, double endPoint2)
     }
 }
 
+double calculate_approximation(double eP1, double eP2)
+{
+    return (eP1 + eP2)/2.0;
+}
+
 void deallocate_linked_list(NodePtr &head)
 {
    NodePtr tempPtr;
