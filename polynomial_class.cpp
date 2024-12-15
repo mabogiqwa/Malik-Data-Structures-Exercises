@@ -47,7 +47,7 @@ double f(double x, NodePtr head);
 //x must be a real number
 //Postcondition: The function returns the image of the given polynomial
 
-std::string bisection_method(NodePtr head, double endPoint1, double endPoint2);
+void bisection_method(NodePtr head, double endPoint1, double endPoint2);
 //Precondition: The linked list must be populated with the necessary values
 //and the endpoints must be real numbers.
 //Postcondition: The function will return the root approximation between the interval.
@@ -319,49 +319,38 @@ double calculate_discriminant(NodePtr head)
     return discriminant;
 }
 
-//Still buggy, to be updated
-std::string bisection_method(NodePtr head, double endPoint1, double endPoint2)
+void bisection_method(NodePtr head, double endPoint1, double endPoint2)
 {
-    NodePtr tempPtr = head;
-    double discriminant, tolerance, error = 0;
-    double endPointImage1, endPointImage2;
-    double rootApproximation, approximationImage;
-    std::string stringRootApproximation;
+    double tolerance = pow(10, -3);
+    double error, endpoint1, endpoint2, difference;
+    double approximation, check_product;
+    int iter = 1;
 
-    if (tempPtr->exponent == 2)
-        discriminant = calculate_discriminant(head);
-    else
-        return "No real root exists";
+    check_product = f(endPoint1, head) * f(endPoint2, head);
 
-    int iteration = 0;
+    error = calculate_approximation(endPoint1, endPoint2) - 0;
 
-    while (iteration < 3)
+    if (check_product < 0)
     {
-        rootApproximation = (endPoint1 + endPoint2)/2.0;
-        std::cout << rootApproximation << std::endl;
-
-        endPointImage1 = f(endPoint1, head);
-        endPointImage2 = f(endPoint2, head);
-
-        approximationImage = f(rootApproximation, head);
-
-        if ((endPointImage1 * approximationImage) < 0)
+        while (error > tolerance)
         {
-            endPoint2 = rootApproximation;
+            approximation = calculate_approximation(endPoint1, endPoint2);
+            std::cout << std::fixed << std::setprecision(6) << "Iteration " << iter << ": " << approximation << std::endl;
+            double approximation_image = f(approximation, head);
 
-            error = rootApproximation - ((endPoint1 + endPoint2)/2.0);
-        } else {
-            endPoint1 = rootApproximation;
+            double endpoint1_image = f(endPoint1, head);
 
-            error = rootApproximation - ((endPoint1 + endPoint2)/2.0);
+            if ((approximation_image * endpoint1_image) < 0)
+                endPoint2 = approximation;
+            else
+                endPoint1 = approximation;
+
+            difference = calculate_approximation(endPoint1, endPoint2) - approximation;
+            error = fabs(difference);
+
+            iter = iter + 1;
         }
-        iteration++;
     }
-
-    stringRootApproximation = std::to_string(rootApproximation);
-
-    return stringRootApproximation;
-
 }
 
 void deallocate_linked_list(NodePtr &head)
