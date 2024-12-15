@@ -2,7 +2,6 @@
 //Author: Mabo Giqwa
 //Program Description: Stores the contents polynomial cstring
 //in a FIFO data structure
-//The bisection method has a logical errors
 #include <iostream>
 #include <string>
 #include <cctype>
