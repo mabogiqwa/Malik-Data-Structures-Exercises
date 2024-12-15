@@ -2,6 +2,7 @@
 //Author: Mabo Giqwa
 //Program Description: Stores the contents polynomial cstring
 //in a FIFO data structure
+//A bug exists for functions such as f(x) = x^2 - x
 #include <iostream>
 #include <string>
 #include <cctype>
