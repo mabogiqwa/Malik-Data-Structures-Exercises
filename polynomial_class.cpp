@@ -8,6 +8,7 @@
 #include <cctype>
 #include <cmath>
 #include <cstring>
+#include <iomanip>
 
 const int MAXSIZE = 100;
 
@@ -51,6 +52,10 @@ void bisection_method(NodePtr head, double endPoint1, double endPoint2);
 //Precondition: The linked list must be populated with the necessary values
 //and the endpoints must be real numbers.
 //Postcondition: The function will return the root approximation between the interval.
+
+double calculate_approximation(double eP1, double eP2);
+//Precondition: The arguments for the formal parameters must be rational numbers 
+//Postcondition: Returns the midpoint of the formal parameters.
 
 double calculate_discriminant(NodePtr head);
 //Precondition: The highest degree in the linked list(polynomial) must be 2
