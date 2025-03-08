@@ -335,7 +335,7 @@ void bisection_method(NodePtr head, double endPoint1, double endPoint2)
 
     error = calculate_approximation(endPoint1, endPoint2) - 0;
 
-    if (check_product < 0)
+    if (check_product <= 0)
     {
         while (error > tolerance)
         {
