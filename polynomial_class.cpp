@@ -53,6 +53,20 @@ void bisection_method(NodePtr head, double endPoint1, double endPoint2);
 //and the endpoints must be real numbers.
 //Postcondition: The function will return the root approximation between the interval.
 
+double simpsons_rule(NodePtr head, double endPoint1, double endPoint2, double stepSize)
+{
+    double middleEndPoint = (endPoint1 + endPoint2)/2;
+
+    double derivative = (stepSize/3)*(f(endPoint1, head) + 4*f(middleEndPoint, head) + f(endPoint2, head));
+
+    return derivative;
+}
+
+double simpsons_rule(NodePtr head, double endPoint1, double endPoint2, double stepSize);
+//Precondition: The linked list must be populated with the necessary values and 
+//and the endpoints must be real numbers
+//Postcondition: The function will return an integral approximation using simpson's method
+
 double calculate_approximation(double eP1, double eP2);
 //Precondition: The arguments for the formal parameters must be rational numbers 
 //Postcondition: Returns the midpoint of the formal parameters.
