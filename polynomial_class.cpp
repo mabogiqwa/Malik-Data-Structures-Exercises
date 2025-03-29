@@ -44,7 +44,7 @@ void print_linked_list(NodePtr head);
 //Postcondition: Prints the contents of each node in the linked list
 
 double f(double x, NodePtr head);
-//Precondition: The linked list must already be populated with the necessary values and the 
+//Precondition: The linked list must already be populated with the necessary values and the
 //x must be a real number
 //Postcondition: The function returns the image of the given polynomial
 
@@ -53,22 +53,13 @@ void bisection_method(NodePtr head, double endPoint1, double endPoint2);
 //and the endpoints must be real numbers.
 //Postcondition: The function will return the root approximation between the interval.
 
-double simpsons_rule(NodePtr head, double endPoint1, double endPoint2, double stepSize)
-{
-    double middleEndPoint = (endPoint1 + endPoint2)/2;
-
-    double derivative = (stepSize/3)*(f(endPoint1, head) + 4*f(middleEndPoint, head) + f(endPoint2, head));
-
-    return derivative;
-}
-
 double simpsons_rule(NodePtr head, double endPoint1, double endPoint2, double stepSize);
-//Precondition: The linked list must be populated with the necessary values and 
+//Precondition: The linked list must be populated with the necessary values and
 //and the endpoints must be real numbers
 //Postcondition: The function will return an integral approximation using simpson's method
 
 double calculate_approximation(double eP1, double eP2);
-//Precondition: The arguments for the formal parameters must be rational numbers 
+//Precondition: The arguments for the formal parameters must be rational numbers
 //Postcondition: Returns the midpoint of the formal parameters.
 
 double calculate_discriminant(NodePtr head);
@@ -89,8 +80,11 @@ int main()
 
     head = store_in_linked_list(head, currentPtr, polynomial);
 
-    std::cout << f(10, head) << std::endl;
+    //std::cout << f(10, head) << std::endl;
     //print_linked_list(head);
+
+    //bisection_method(head,1,4);
+    std::cout << "Integral is: " << simpsons_rule(head, 0, 2, 1) << std::endl;
 
     deallocate_linked_list(head);
 
@@ -154,19 +148,19 @@ Node* store_in_linked_list(NodePtr &head, NodePtr &currentNode, char polynomial[
     while (polynomial[index] != '\0')
     {
         //First iteration
-        double value, currentSign; 
+        double value, currentSign;
         std::string coeff_string = "";
         numOfIterations++;
 
-        if (polynomial[index] == '-') {  
+        if (polynomial[index] == '-') {
             currentSign = -1;
-            index = index + 1; 
+            index = index + 1;
         } else {
             currentSign = 1;
         }
 
         if (polynomial[index] == '+' || polynomial[index] == ' ') {
-            index = index + 1; 
+            index = index + 1;
             if (polynomial[index] == ' ')
                index = index + 1;
         }
@@ -175,11 +169,11 @@ Node* store_in_linked_list(NodePtr &head, NodePtr &currentNode, char polynomial[
         {
             if (numOfXVariables > 0)
             {
-                while (polynomial[index] != 'x') 
+                while (polynomial[index] != 'x')
                 {
                     coeff_string += polynomial[index];
                     index++;
-                } 
+                }
             } else {
                 while (polynomial[index] != '\0')
                 {
@@ -188,12 +182,12 @@ Node* store_in_linked_list(NodePtr &head, NodePtr &currentNode, char polynomial[
                     index++;
                 }
             }
-                
+
             coefficient_d = std::stod(coeff_string);
-    
-            if (polynomial[index] == 'x') { 
+
+            if (polynomial[index] == 'x') {
                 numOfXVariables--;
-                index = index + 1; 
+                index = index + 1;
 
                 if (polynomial[index] == '^')
                 {
@@ -213,14 +207,14 @@ Node* store_in_linked_list(NodePtr &head, NodePtr &currentNode, char polynomial[
             numOfXVariables--;
             coefficient_d = 1;
             index = index + 1;
-            if (polynomial[index] == '^') 
+            if (polynomial[index] == '^')
             {
                 index = index + 1;
                 if (isdigit(polynomial[index])) {
                     std::string char_str(1, polynomial[index]);
                     exponent_d = std::stod(char_str);
                 }
-                index = index + 1; 
+                index = index + 1;
             } else if (check_if_character_exists(polynomial[index]))
             {
                 exponent_d = 1;
@@ -257,7 +251,7 @@ void add_node_to_list(NodePtr &currentNode, double c, double exp)
     currentNode = tempPtr;
     tempPtr->link = nullptr;
 }
-       
+
 void print_linked_list(NodePtr head)
 {
     NodePtr iter;
@@ -372,6 +366,15 @@ void bisection_method(NodePtr head, double endPoint1, double endPoint2)
     }
 }
 
+double simpsons_rule(NodePtr head, double endPoint1, double endPoint2, double stepSize)
+{
+    double middleEndPoint = (endPoint1 + endPoint2)/2;
+
+    double integralApproximation = (stepSize/3)*(f(endPoint1, head) + 4*f(middleEndPoint, head) + f(endPoint2, head));
+
+    return integralApproximation;
+}
+
 double calculate_approximation(double eP1, double eP2)
 {
     return (eP1 + eP2)/2.0;
@@ -384,7 +387,7 @@ void deallocate_linked_list(NodePtr &head)
    {
       if (head->link != nullptr)
          head = head->link;
-      
+
       delete tempPtr;
       tempPtr = nullptr;
       tempPtr = head;
