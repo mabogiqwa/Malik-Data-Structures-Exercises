@@ -48,6 +48,11 @@ double f(double x, NodePtr head);
 //x must be a real number
 //Postcondition: The function returns the image of the given polynomial
 
+double d_dx(double x, NodePtr head);
+//Precondition: The linked list must be populated with values
+//Postcondition: The function returns the output of differentiating
+//a polynomial at some point x.
+
 void bisection_method(NodePtr head, double endPoint1, double endPoint2);
 //Precondition: The linked list must be populated with the necessary values
 //and the endpoints must be real numbers.
@@ -84,7 +89,8 @@ int main()
     //print_linked_list(head);
 
     //bisection_method(head,1,4);
-    std::cout << "Integral is: " << simpsons_rule(head, 0, 2, 1) << std::endl;
+    std::cout << d_dx(1, head) << std::endl;
+    //std::cout << "Integral is: " << simpsons_rule(head, 0, 2, 1) << std::endl;
 
     deallocate_linked_list(head);
 
@@ -132,6 +138,25 @@ bool check_if_character_exists(char someChar)
         return true;
     else
         return false;
+}
+
+double d_dx(double x, NodePtr head)
+{
+    NodePtr iter;
+    double dCoefficient, dExponent;
+    double output = 0;
+
+    for (iter = head; iter != nullptr; iter=iter->link) {
+        if (iter->exponent == 0) {
+            iter = iter->link;
+        } else {
+            dCoefficient = (iter->coefficient)*iter->exponent;
+            dExponent = iter->exponent-1;
+
+            output += (pow(x, dExponent))*dCoefficient;
+        }
+    }
+    return output;
 }
 
 
