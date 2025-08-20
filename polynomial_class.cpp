@@ -65,7 +65,8 @@ Node* initialize_list(int coefficient, int exponent)
     return tempPtr;
 }
 
-//Prototype
+//Prototype: Doesn't work adequately for polynomial s.a (5x^3 - 2x + 1)
+//and 3x^3 - 4x^2 - x. Leaves out terms in the summation polynomial.
 Node* add_polynomials(const NodePtr head1, const NodePtr head2) {
     NodePtr iter1, iter2, currentPtr;
     NodePtr newHead = new Node;
