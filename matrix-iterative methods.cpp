@@ -4,6 +4,20 @@
 const int WIDTH = 3;
 const int HEIGHT = 3;
 
+double compute_determinant(double squareMatrix[WIDTH][HEIGHT]);
+//Precondition: The matrix must be a square matrix i.e. WIDTH = HEIGHT where 2 <= HEIGHT, WIDTH <= 3
+//AND populated with rational numbers.
+//Postcondition: The function returns the determinant of the matrix
+
+int main()
+{
+    double squareMatrix[WIDTH][HEIGHT] = {{1.567,2.56,3.69},{3.11,4.34,5.31},{5.90,6.34,1.112}};
+
+    std::cout << compute_determinant(squareMatrix);
+
+    return 0;
+}
+
 double compute_determinant(double squareMatrix[WIDTH][HEIGHT])
 {
     double determinant;
@@ -23,13 +37,4 @@ double compute_determinant(double squareMatrix[WIDTH][HEIGHT])
     }
 
     return determinant;
-}
-
-int main()
-{
-    double squareMatrix[WIDTH][HEIGHT] = {{1,2,3},{3,4,5},{5,6,1}};
-
-    std::cout << compute_determinant(squareMatrix);
-
-    return 0;
 }
