@@ -72,14 +72,14 @@ Node* add_polynomials(const NodePtr head1, const NodePtr head2) {
     double sumCoeff;
 
     int iter = 0;
-    currentPtr = newHead;
     for (iter1 = head1; iter1 != nullptr; iter1 = iter1->link)
     {
         for (iter2 = head2; iter2 != nullptr; iter2 = iter2->link) {
             if ((iter1->exponent == iter2->exponent) && iter == 0)
             {
                 sumCoeff = (iter1->coefficient + iter2->coefficient);
-                add_node_to_list(currentPtr, sumCoeff, iter1->exponent);
+                newHead = initialize_list(sumCoeff, iter1->exponent);
+                currentPtr = newHead;
             } else if (iter1->exponent == iter2->exponent) {
                 sumCoeff = (iter1->coefficient + iter2->coefficient);
                 add_node_to_list(currentPtr, sumCoeff, iter1->exponent);
@@ -87,7 +87,6 @@ Node* add_polynomials(const NodePtr head1, const NodePtr head2) {
             iter++;
         }
     }
-    //std::cout << "exiting for loop" << std::endl;
 
     return newHead;
 }
