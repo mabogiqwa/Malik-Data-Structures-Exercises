@@ -53,7 +53,44 @@ double f(double x, NodePtr head);
 double d_dx(double x, NodePtr head);
 //Precondition: The linked list must be populated with values
 //Postcondition: The function returns the output of differentiating
-//a polynomial at some point x.
+//a polynomial at some point x=x_0.
+
+Node* initialize_list(int coefficient, int exponent)
+{
+    NodePtr tempPtr = new Node;
+    tempPtr->coefficient = coefficient;
+    tempPtr->exponent = exponent;
+    tempPtr->link = nullptr;
+
+    return tempPtr;
+}
+
+//Prototype
+Node* add_polynomials(const NodePtr head1, const NodePtr head2) {
+    NodePtr iter1, iter2, currentPtr;
+    NodePtr newHead = new Node;
+    double sumCoeff;
+
+    int iter = 0;
+    currentPtr = newHead;
+    for (iter1 = head1; iter1 != nullptr; iter1 = iter1->link)
+    {
+        for (iter2 = head2; iter2 != nullptr; iter2 = iter2->link) {
+            if ((iter1->exponent == iter2->exponent) && iter == 0)
+            {
+                sumCoeff = (iter1->coefficient + iter2->coefficient);
+                add_node_to_list(currentPtr, sumCoeff, iter1->exponent);
+            } else if (iter1->exponent == iter2->exponent) {
+                sumCoeff = (iter1->coefficient + iter2->coefficient);
+                add_node_to_list(currentPtr, sumCoeff, iter1->exponent);
+            }
+            iter++;
+        }
+    }
+    //std::cout << "exiting for loop" << std::endl;
+
+    return newHead;
+}
 
 void bisection_method(NodePtr head, double endPoint1, double endPoint2);
 //Precondition: The linked list must be populated with the necessary values
@@ -80,21 +117,27 @@ void deallocate_linked_list(NodePtr &head);
 int main()
 {
     NodePtr head = new Node;
-    NodePtr currentPtr;
+    NodePtr head1 = new Node;
+    NodePtr head2 = new Node;
+    NodePtr currentPtr, currentPtr1;
     char polynomial[MAXSIZE];
+    char polynomial1[MAXSIZE];
 
     input_string_polynomial(polynomial);
 
     head = store_in_linked_list(head, currentPtr, polynomial);
-
-    //std::cout << f(10, head) << std::endl;
     //print_linked_list(head);
+    input_string_polynomial(polynomial1);
 
-    //bisection_method(head,1,4);
-    std::cout << d_dx(1, head) << std::endl;
-    //std::cout << "Integral is: " << simpsons_rule(head, 0, 2, 1) << std::endl;
+    head1 = store_in_linked_list(head1, currentPtr1, polynomial1);
+    //print_linked_list(head1);
+    head2 = add_polynomials(head, head1);
+
+    print_linked_list(head2);
 
     deallocate_linked_list(head);
+    deallocate_linked_list(head1);
+    deallocate_linked_list(head2);
 
     std::cout << "Program ended" << std::endl;
 }
