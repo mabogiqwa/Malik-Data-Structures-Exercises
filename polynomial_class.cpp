@@ -5,6 +5,7 @@
 //A bug exists for functions such as f(x) = x^2 - x
 //Going to add code sections in add_node_to_list which enable parsing of exponential
 //and trigonometric functions
+//Constraint: For adding two polynomials, terms must be ordered in descending exponent powers
 #include <iostream>
 #include <string>
 #include <cctype>
