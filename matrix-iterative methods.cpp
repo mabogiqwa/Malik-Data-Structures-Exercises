@@ -14,8 +14,8 @@ std::vector<std::vector<double>> operator *(std::vector<std::vector<double>> &m1
 //Precondition: The columns of the first matrix must be equal to the rows of the second matrix.
 //Postcondition: The function returns the resulting matrix from matrix multiplication.
 
-void print(std::vector<std::vector<double>> &m);
-//Postcondition: Prints the contents of a matrix/vector.
+std::ostream& operator <<(std::ostream& os, const std::vector<std::vector<double>> &m);
+//Postcondition: Prints the entries of a matrix/vector.
 
 int main()
 {
@@ -27,20 +27,19 @@ int main()
 
     std::vector<std::vector<double>> resultingMatrix(ROWS, std::vector<double>(COLUMNS));
 
-    resultingMatrix = v * w;
-
-    print(resultingMatrix);
+    std::cout << v * w;
 
     return 0;
 }
 
-void print(std::vector<std::vector<double>> &m) {
+std::ostream& operator <<(std::ostream& os, const std::vector<std::vector<double>> &m) {
     for (int i = 0; i < ROWS; i++) {
         for (int j = 0; j < COLUMNS; j++) {
             std::cout << m[i][j] << " ";
         }
         std::cout << std::endl;
     }
+    return os;
 }
 
 std::vector<std::vector<double>> operator *(std::vector<std::vector<double>> &m1, std::vector<std::vector<double>> &m2)
