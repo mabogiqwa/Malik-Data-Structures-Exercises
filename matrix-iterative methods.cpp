@@ -2,8 +2,8 @@
 #include <cmath>
 #include <vector>
 
-const int ROWS = 2;
-const int COLUMNS = 2;
+const int ROWS = 3;
+const int COLUMNS = 3;
 
 double compute_determinant(std::vector<std::vector<double>> &m);
 //Precondition: The matrix must be a square matrix i.e. WIDTH = HEIGHT where 2 <= HEIGHT, WIDTH <= 4
@@ -17,15 +17,17 @@ std::vector<std::vector<double>> operator *(std::vector<std::vector<double>> &m1
 std::ostream& operator <<(std::ostream& os, const std::vector<std::vector<double>> &m);
 //Postcondition: Prints the entries of a matrix/vector.
 
+std::vector<double> gauss_seidel(std::vector<std::vector<double>> &v);
+//Precondition: The matrix must be strictly diagonally dominant to converge to a solution.
+//Postcondition: The function returns approximate solution values to the linear system.
+
 int main()
 {
     std::vector<std::vector<double>> v(ROWS, std::vector<double>(COLUMNS));
-    v = {{1,2},{3,4}};
+    v = {{2,1,0},{1,-1,2},{0,2,4}};
     //double m[WIDTH][HEIGHT] = {{1,0,4,-6},{2,5,0,3},{-1,2,3,5},{2,1,-2,3}};
-    std::vector<std::vector<double>> w(ROWS, std::vector<double>(COLUMNS));
-    w = {{5,6},{6,7}};
-
-    std::vector<std::vector<double>> resultingMatrix(ROWS, std::vector<double>(COLUMNS));
+    std::vector<std::vector<double>> w(3, std::vector<double>(1));
+    w = {{2},{5},{-1}};
 
     std::cout << v * w;
 
