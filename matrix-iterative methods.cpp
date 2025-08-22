@@ -8,7 +8,7 @@ double det(std::vector<std::vector<double>> &m);
 //AND populated with rational numbers.
 //Postcondition: The function returns the determinant of the matrix
 
-std::vector<std::vector<double>> operator *(const std::vector<std::vector<double>> &m1, const std::vector<std::vector<double>> &m2);
+std::vector<std::vector<double>> operator *(std::vector<std::vector<double>> &m1, std::vector<std::vector<double>> &m2);
 //Precondition: The columns of the first matrix must be equal to the rows of the second matrix.
 //Postcondition: The function returns the resulting matrix from matrix multiplication.
 
@@ -24,12 +24,12 @@ std::vector<std::vector<double>> operator +(const std::vector<std::vector<double
 //Postcondition: The function returns a vector which contains entries which are the difference of the corresponding
 //entries of the matrices/vectors passed as arguments.
 
-std::vector<std::vector<double>> operator -(const std::vector<std::vector<double>> &m1, const std::vector<std::vector<double>> &m2);
+std::vector<std::vector<double>> operator -(std::vector<std::vector<double>> &m1, std::vector<std::vector<double>> &m2);
 //Precondition: The matrices passed as arguments must have the same dimensions i.e rows = columns
 //Postcondition: The function returns a vector which contains entries which are the sum of the corresponding entries of the
 //matrices/vectors passed as arguments. Might implement broadcasting later on.
 
-std::vector<std::vector<double>> operator *(double scalar, const std::vector<std::vector<double>> &m);
+std::vector<std::vector<double>> operator *(double scalar, std::vector<std::vector<double>> &m);
 //Precondition: The scalar must be an integer or rational number(finite-point decimal)
 //Postcondition: The function must return the scaled matrix/vector in which every entry is scaled by scalar.
 
@@ -44,12 +44,12 @@ long double taxicab_norm(std::vector<std::vector<double>> &m);
 int main()
 {
     std::vector<std::vector<double>> v(1, std::vector<double>(1));
-    v = {{2,3,4,5,6,7,3,8,9,0,3,-2,1,4,6,7,8,9,0,8,4,2,4}};
+    v = {{3,4},{5,6}};
 
-    std::vector<std::vector<double>> w(4, std::vector<double>(4));
-    w = {{4,7,1,8},{1,0,1,2}};
+    std::vector<std::vector<double>> w(2, std::vector<double>(4));
+    w = {{4,1},{9,0}};
 
-    std::cout << taxicab_norm(v);
+    std::cout << v * w;
 
     return 0;
 }
