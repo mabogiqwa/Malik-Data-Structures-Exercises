@@ -2,11 +2,12 @@
 #include <iostream>
 #include <cmath>
 #include <vector>
+#include <limits>
 
 double det(std::vector<std::vector<double>> &m);
 //Precondition: The matrix must be a square matrix i.e. ROWS = COLUMNS where 2 <= ROWS, COLUMNS <= 4
 //AND populated with rational numbers.
-//Postcondition: The function returns the determinant of the matrix
+//Postcondition: The function returns the determinant of the matrix.
 
 std::vector<std::vector<double>> operator *(std::vector<std::vector<double>> &m1, std::vector<std::vector<double>> &m2);
 //Precondition: The columns of the first matrix must be equal to the rows of the second matrix.
@@ -34,25 +35,66 @@ std::vector<std::vector<double>> operator *(double scalar, std::vector<std::vect
 //Postcondition: The function must return the scaled matrix/vector in which every entry is scaled by scalar.
 
 long double euclid_norm(std::vector<std::vector<double>> &m);
-//Precondition: The argument matrix/vector has to be a row or column vector
-//Postcondition: The function returns the euclidean norm of the row/column vector
+//Precondition: The argument matrix/vector has to be a row or column vector.
+//Postcondition: The function returns the euclidean norm of the row/column vector.
 
 long double taxicab_norm(std::vector<std::vector<double>> &m);
-//Precondition: The argument matrix/vector has to be a row or column vector
-//Postcondition: The function returns the taxicab/manhattan norm of the row/column vector
+//Precondition: The argument matrix/vector has to be a row or column vector.
+//Postcondition: The function returns the taxicab/manhattan norm of the row/column vector.
+
+long double max_norm(std::vector<std::vector<double>> &m);
+//Precondition: The passed value must be of type std::vector<std::vector<double>>
+//Postcondition: The function returns a value which is the absolute maximum of a matrix/vector.
+
+long double frobenius_norm(std::vector<std::vector<double>> &m);
+//Precondition: The passed value must be of type std::vector<std::vector<double>>
+//Postcondition: The functions a long double value which is the frobenius norm.
 
 int main()
 {
     std::vector<std::vector<double>> v(1, std::vector<double>(1));
-    v = {{3,4},{5,6}};
+    v = {{3,4,-1,0},{1,10,-9,-15},{0,78,-101,3}};
 
     std::vector<std::vector<double>> w(2, std::vector<double>(4));
     w = {{4,1},{9,0}};
 
-    std::cout << v * w;
+    std::cout << frobenius_norm(v);
 
     return 0;
 }
+
+long double frobenius_norm(std::vector<std::vector<double>> &m)
+{
+    int rows = m.size();
+    int cols = m[0].size();
+    long double sum = 0;
+
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            sum += (m[i][j]*m[i][j]);
+        }
+    }
+
+    return sqrt(sum);
+}
+
+long double max_norm(std::vector<std::vector<double>> &m)
+{
+    long double largestVal = -std::numeric_limits<double>::infinity();
+    int rows = m.size();
+    int cols = m[0].size();
+
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            if (fabs(m[i][j]) > largestVal) {
+                    largestVal = fabs(m[i][j]);
+            }
+        }
+    }
+
+    return largestVal;
+}
+
 
 long double taxicab_norm(std::vector<std::vector<double>> &m)
 {
@@ -95,8 +137,6 @@ long double euclid_norm(std::vector<std::vector<double>> &m)
 
     return norm;
 }
-
-
 
 std::ostream& operator <<(std::ostream& os, const std::vector<std::vector<double>> &m) {
     int rows = m.size();
