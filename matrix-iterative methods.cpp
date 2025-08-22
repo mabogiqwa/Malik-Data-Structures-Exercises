@@ -32,15 +32,19 @@ std::vector<std::vector<double>> operator -(std::vector<std::vector<double>> &m1
 //Postcondition: The function returns a vector which contains entries which are the sum of the corresponding entries of the
 //matrices/vectors passed as arguments. Might implement broadcasting later on.
 
+std::vector<std::vector<double>> operator *(double scalar, std::vector<std::vector<double>> &m);
+//Precondition: The scalar must be an integer or rational number(finite-point decimal)
+//Postcondition: The function must return the scaled matrix/vector in which every entry is scaled by scalar.
+
 int main()
 {
-    std::vector<std::vector<double>> v(4, std::vector<double>(4));
-    v = {{2}};
+    std::vector<std::vector<double>> v(1, std::vector<double>(1));
+    v = {{2,0},{3,2},{6,1}};
 
     std::vector<std::vector<double>> w(4, std::vector<double>(4));
-    w = {{4}};
+    w = {{4,7,1,8},{1,0,1,2}};
 
-    std::cout << w + v;
+    std::cout << 5 * w;
 
     return 0;
 }
@@ -58,15 +62,31 @@ std::ostream& operator <<(std::ostream& os, const std::vector<std::vector<double
     return os;
 }
 
+std::vector<std::vector<double>> operator *(double scalar, std::vector<std::vector<double>> &m)
+{
+    int rows = m.size();
+    int cols = m[0].size();
+
+    std::vector<std::vector<double>> result(rows, std::vector<double>(cols));
+
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            result[i][j] = scalar * m[i][j];
+        }
+    }
+
+    return result;
+}
+
 std::vector<std::vector<double>> operator *(std::vector<std::vector<double>> &m1, std::vector<std::vector<double>> &m2)
 {
-
-    std::vector<std::vector<double>> C(ROWS, std::vector<double>(COLUMNS));
     int m, n, p;
 
     m = m1.size();
     n = m1[0].size();
     p = m2[0].size();
+
+    std::vector<std::vector<double>> C(m, std::vector<double>(p));
 
     for (int i = 0; i < m; i++) {
         for (int j = 0; j < p; j++) {
@@ -82,12 +102,14 @@ std::vector<std::vector<double>> operator *(std::vector<std::vector<double>> &m1
 double compute_determinant(std::vector<std::vector<double>> &m)
 {
     double determinant;
+    int rows = m.size();
+    int cols = m[0].size();
 
-    if ((ROWS == 2) && (COLUMNS == 2)) {
+    if ((rows == 2) && (cols == 2)) {
         determinant = (m[0][0]*m[1][1]) - (m[0][1]*m[1][0]);
     }
 
-    if ((ROWS == 3) && (ROWS == 3)) {
+    if ((rows == 3) && (cols == 3)) {
         determinant =
             m[0][0] * (m[1][1] * m[2][2] -
                                   m[1][2] * m[2][1])
@@ -98,7 +120,7 @@ double compute_determinant(std::vector<std::vector<double>> &m)
     }
 
 
-    if ((ROWS == 4) && (COLUMNS == 4)) {
+    if ((rows == 4) && (cols == 4)) {
         determinant =
             m[0][0] * ( m[1][1] * (m[2][2]*m[3][3] - m[2][3]*m[3][2])
                       - m[1][2] * (m[2][1]*m[3][3] - m[2][3]*m[3][1])
