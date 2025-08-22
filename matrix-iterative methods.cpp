@@ -3,9 +3,6 @@
 #include <cmath>
 #include <vector>
 
-const int ROWS = 4;
-const int COLUMNS = 4;
-
 double compute_determinant(std::vector<std::vector<double>> &m);
 //Precondition: The matrix must be a square matrix i.e. ROWS = COLUMNS where 2 <= ROWS, COLUMNS <= 4
 //AND populated with rational numbers.
