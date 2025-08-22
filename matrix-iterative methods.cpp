@@ -20,6 +20,11 @@ std::vector<double> gauss_seidel(std::vector<std::vector<double>> &v);
 //Precondition: The matrix must be strictly diagonally dominant to converge to a solution.
 //Postcondition: The function returns approximate solution values to the linear system.
 
+std::vector<double> jacobi(std::vector<std::vector<double>> &v);
+//Precondition: The matrix passed as arguments must be non-singular(det!=0) and square(rows=columns).
+//It is sufficient that the matrix is diagonally dominant for the system to converge to a solution.
+//Postcondition: The function returns approximate solution values to the linear system.
+
 std::vector<std::vector<double>> operator +(const std::vector<std::vector<double>> &m1, const std::vector<std::vector<double>> &m2);
 //Precondition: The matrices passed as arguments must have the same dimensions i.e rows = columns
 //Postcondition: The function returns a vector which contains entries which are the difference of the corresponding
