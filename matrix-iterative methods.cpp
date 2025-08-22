@@ -3,12 +3,12 @@
 #include <cmath>
 #include <vector>
 
-double compute_determinant(std::vector<std::vector<double>> &m);
+double det(std::vector<std::vector<double>> &m);
 //Precondition: The matrix must be a square matrix i.e. ROWS = COLUMNS where 2 <= ROWS, COLUMNS <= 4
 //AND populated with rational numbers.
 //Postcondition: The function returns the determinant of the matrix
 
-std::vector<std::vector<double>> operator *(std::vector<std::vector<double>> &m1, std::vector<std::vector<double>> &m2);
+std::vector<std::vector<double>> operator *(const std::vector<std::vector<double>> &m1, const std::vector<std::vector<double>> &m2);
 //Precondition: The columns of the first matrix must be equal to the rows of the second matrix.
 //Postcondition: The function returns the resulting matrix from matrix multiplication.
 
@@ -19,32 +19,84 @@ std::vector<double> gauss_seidel(std::vector<std::vector<double>> &v);
 //Precondition: The matrix must be strictly diagonally dominant to converge to a solution.
 //Postcondition: The function returns approximate solution values to the linear system.
 
-std::vector<std::vector<double>> operator +(std::vector<std::vector<double>> &m1, std::vector<std::vector<double>> &m2);
+std::vector<std::vector<double>> operator +(const std::vector<std::vector<double>> &m1, const std::vector<std::vector<double>> &m2);
 //Precondition: The matrices passed as arguments must have the same dimensions i.e rows = columns
 //Postcondition: The function returns a vector which contains entries which are the difference of the corresponding
 //entries of the matrices/vectors passed as arguments.
 
-std::vector<std::vector<double>> operator -(std::vector<std::vector<double>> &m1, std::vector<std::vector<double>> &m2);
+std::vector<std::vector<double>> operator -(const std::vector<std::vector<double>> &m1, const std::vector<std::vector<double>> &m2);
 //Precondition: The matrices passed as arguments must have the same dimensions i.e rows = columns
 //Postcondition: The function returns a vector which contains entries which are the sum of the corresponding entries of the
 //matrices/vectors passed as arguments. Might implement broadcasting later on.
 
-std::vector<std::vector<double>> operator *(double scalar, std::vector<std::vector<double>> &m);
+std::vector<std::vector<double>> operator *(double scalar, const std::vector<std::vector<double>> &m);
 //Precondition: The scalar must be an integer or rational number(finite-point decimal)
 //Postcondition: The function must return the scaled matrix/vector in which every entry is scaled by scalar.
+
+long double euclid_norm(std::vector<std::vector<double>> &m);
+//Precondition: The argument matrix/vector has to be a row or column vector
+//Postcondition: The function returns the euclidean norm of the row/column vector
+
+long double taxicab_norm(std::vector<std::vector<double>> &m);
+//Precondition: The argument matrix/vector has to be a row or column vector
+//Postcondition: The function returns the taxicab/manhattan norm of the row/column vector
 
 int main()
 {
     std::vector<std::vector<double>> v(1, std::vector<double>(1));
-    v = {{2,0},{3,2},{6,1}};
+    v = {{2,3,4,5,6,7,3,8,9,0,3,-2,1,4,6,7,8,9,0,8,4,2,4}};
 
     std::vector<std::vector<double>> w(4, std::vector<double>(4));
     w = {{4,7,1,8},{1,0,1,2}};
 
-    std::cout << 5 * w;
+    std::cout << taxicab_norm(v);
 
     return 0;
 }
+
+long double taxicab_norm(std::vector<std::vector<double>> &m)
+{
+    long double absSum = 0;
+    int rows = m.size();
+    int cols = m[0].size();
+
+    if (rows == 1) {
+        for (int i = 0; i < cols; i++) {
+            absSum += fabs(m[0][i]);
+        }
+    }
+    if (cols == 1) {
+        for (int j = 0; j < rows; j++) {
+            absSum += fabs(m[j][0]);
+        }
+    }
+
+    return absSum;
+}
+
+long double euclid_norm(std::vector<std::vector<double>> &m)
+{
+    int rows = m.size();
+    int cols = m[0].size();
+    long double sum = 0, norm = 0;
+
+    if (cols == 1) {
+        for (int i = 0; i < rows; i++) {
+            sum += pow(m[i][0], 2.00);
+        }
+        norm = sqrt(sum);
+    }
+    if (rows == 1) {
+        for (int j = 0; j < cols; j++) {
+            sum += pow(m[0][j], 2.00);
+        }
+        norm = sqrt(sum);
+    }
+
+    return norm;
+}
+
+
 
 std::ostream& operator <<(std::ostream& os, const std::vector<std::vector<double>> &m) {
     int rows = m.size();
@@ -96,7 +148,7 @@ std::vector<std::vector<double>> operator *(std::vector<std::vector<double>> &m1
     return C;
 }
 
-double compute_determinant(std::vector<std::vector<double>> &m)
+double det(std::vector<std::vector<double>> &m)
 {
     double determinant;
     int rows = m.size();
