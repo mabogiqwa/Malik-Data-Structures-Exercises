@@ -25,6 +25,10 @@ std::vector<double> jacobi(std::vector<std::vector<double>> &v);
 //It is sufficient that the matrix is diagonally dominant for the system to converge to a solution.
 //Postcondition: The function returns approximate solution values to the linear system.
 
+bool isStrictlyDiagonallyDominant(std::vector<std::vector<double>> &v)
+//Precondition: The given matrix/vector must be a square
+//Postcondition: Returns a boolean value indicated whether matrix is strictly diagonally dominant or not.
+
 std::vector<std::vector<double>> operator +(const std::vector<std::vector<double>> &m1, const std::vector<std::vector<double>> &m2);
 //Precondition: The matrices passed as arguments must have the same dimensions i.e rows = columns
 //Postcondition: The function returns a vector which contains entries which are the difference of the corresponding
@@ -57,13 +61,13 @@ long double frobenius_norm(std::vector<std::vector<double>> &m);
 
 int main()
 {
-    std::vector<std::vector<double>> v(1, std::vector<double>(1));
-    v = {{3,4,-1,0},{1,10,-9,-15},{0,78,-101,3}};
+    std::vector<std::vector<double>> v(3, std::vector<double>(3));
+    v = {{5, 1, 1},{2, 6, 1},{1, 1, 7}};
 
     std::vector<std::vector<double>> w(2, std::vector<double>(4));
     w = {{4,1},{9,0}};
 
-    std::cout << frobenius_norm(v);
+    std::cout << isStrictlyDiagonallyDominant(v);
 
     return 0;
 }
@@ -119,6 +123,28 @@ long double taxicab_norm(std::vector<std::vector<double>> &m)
     }
 
     return absSum;
+}
+
+bool isStrictlyDiagonallyDominant(std::vector<std::vector<double>> &v)
+{
+    bool isDDominant = false;
+    int rows = v.size(), cols = v[0].size();
+    long double sum = 0, diagonalEntry;
+
+    for (int i = 0; i < rows; i++)
+    {
+        for (int j = 0; j < cols; j++) {
+            if (i != j) { sum += fabs(v[i][j]); }
+            if (i = j) { diagonalEntry = v[i][j]; }
+        }
+        if (fabs(diagonalEntry) >= sum) {
+            isDDominant = true;
+        } else {
+            return false;
+        }
+    }
+
+    return isDDominant;
 }
 
 long double euclid_norm(std::vector<std::vector<double>> &m)
