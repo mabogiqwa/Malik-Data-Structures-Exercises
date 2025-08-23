@@ -17,7 +17,78 @@ std::vector<std::vector<double>> operator *(std::vector<std::vector<double>> &m1
 std::ostream& operator <<(std::ostream& os, const std::vector<std::vector<double>> &m);
 //Postcondition: Prints the entries of a matrix/vector.
 
-std::vector<double> gauss_seidel(std::vector<std::vector<double>> &v);
+std::vector<std::vector<double>> gauss_seidel(std::vector<std::vector<double>> &A, std::vector<std::vector<double>> &b, int iterations)
+{
+    int rows = A.size();
+    int cols = A[0].size();
+
+    std::vector<std::vector<double>> x;
+
+    if ((rows == 2) && (cols == 2)) {
+        double firstApprox, secondApprox;
+
+        x = {{0,0}}; //initial approximation
+
+        //std::cout << "x1:         x2:" << std::endl;
+        for (int iter = 0; iter < iterations; iter++)
+        {
+            firstApprox = (1 / A[0][0]) * (b[0][0] - A[0][1] * x[0][1]);
+            x[0][0] = firstApprox;
+            secondApprox = (1 / A[1][1]) * (b[1][0] - A[1][0] * x[0][0]);
+            x[0][1] = secondApprox;
+
+            //std::cout << std::fixed << std::setprecision(5);
+            //std::cout << firstApprox << "   " << secondApprox << std::endl;
+            // update all values at once
+        }
+    }
+
+    if ((rows == 3) && (cols == 3)) { //This case is not tested
+        double firstApprox, secondApprox, thirdApprox;
+
+        x = {{0,0,0}}; //initial approximation
+
+        //std::cout << "x1:         x2:       x3:" << std::endl;
+        for (int iter = 0; iter < iterations; iter++)
+        {
+            firstApprox = (1 / A[0][0]) * (b[0][0] - A[0][1] * x[0][1] - A[0][2] * x[0][2]);
+            x[0][0] = firstApprox;
+            secondApprox = (1 / A[1][1]) * (b[1][0] - A[1][0] * x[0][0] - A[1][2] * x[0][2]);
+            x[0][1] = secondApprox;
+            thirdApprox = (1 / A[2][2]) * (b[2][0] - A[2][0] * x[0][0] - A[2][1] * x[0][1]);
+            x[0][2] = thirdApprox;
+
+            //std::cout << std::fixed << std::setprecision(5);
+            //std::cout << firstApprox << "   " << secondApprox << "   " << thirdApprox << std::endl;
+            // update all values at once
+        }
+    }
+
+    if ((rows == 4) && (cols == 4)) {
+        double firstApprox, secondApprox, thirdApprox, fourthApprox;
+
+        x = {{0,0,0,0}}; //initial approximation
+
+        //std::cout << "x1:         x2:       x3:        x4:" << std::endl;
+        for (int iter = 0; iter < iterations; iter++)
+        {
+            firstApprox = (1 / A[0][0]) * (b[0][0] - A[0][1] * x[0][1] - A[0][2] * x[0][2] - A[0][3] * x[0][3]);
+            x[0][0] = firstApprox;
+            secondApprox = (1 / A[1][1]) * (b[1][0] - A[1][0] * x[0][0] - A[1][2] * x[0][2] - A[1][3] * x[0][3]);
+            x[0][1] = secondApprox;
+            thirdApprox = (1 / A[2][2]) * (b[2][0] - A[2][0] * x[0][0] - A[2][1] * x[0][1] - A[2][3] * x[0][3]);
+            x[0][2] = thirdApprox;
+            fourthApprox = (1 / A[3][3]) * (b[3][0] - A[3][0] * x[0][0] - A[3][1] * x[0][1] - A[3][2] * x[0][2]);
+            x[0][3] = fourthApprox;
+
+            //std::cout << std::fixed << std::setprecision(5);
+            //std::cout << firstApprox << "   " << secondApprox << "   " << thirdApprox << "   " << fourthApprox << std::endl;
+            // update all values at once
+        }
+    }
+
+    return x;
+}
 //Precondition: The matrix must be strictly diagonally dominant to converge to a solution.
 //Postcondition: The function returns approximate solution values to the linear system.
 
@@ -210,8 +281,8 @@ std::vector<std::vector<double>> jacobi(std::vector<std::vector<double>> &A, std
         {
             x_old = x[0];
 
-            double firstApprox = (1 / A[0][0]) * (b[0][0] - A[0][1] * x_old[1]);
-            double secondApprox = (1 / A[1][1]) * (b[1][0] - A[1][0] * x_old[0]);
+            firstApprox = (1 / A[0][0]) * (b[0][0] - A[0][1] * x_old[1]);
+            secondApprox = (1 / A[1][1]) * (b[1][0] - A[1][0] * x_old[0]);
 
             //std::cout << std::fixed << std::setprecision(5);
             //std::cout << firstApprox << "   " << secondApprox << std::endl;
@@ -232,9 +303,9 @@ std::vector<std::vector<double>> jacobi(std::vector<std::vector<double>> &A, std
         {
             x_old = x[0];
 
-            double firstApprox = (1 / A[0][0]) * (b[0][0] - A[0][1] * x_old[1] - A[0][2] * x_old[2]);
-            double secondApprox = (1 / A[1][1]) * (b[1][0] - A[1][0] * x_old[0] - A[1][2] * x_old[2]);
-            double thirdApprox = (1 / A[2][2]) * (b[2][0] - A[2][0] * x_old[0] - A[2][1] * x_old[1]);
+            firstApprox = (1 / A[0][0]) * (b[0][0] - A[0][1] * x_old[1] - A[0][2] * x_old[2]);
+            secondApprox = (1 / A[1][1]) * (b[1][0] - A[1][0] * x_old[0] - A[1][2] * x_old[2]);
+            thirdApprox = (1 / A[2][2]) * (b[2][0] - A[2][0] * x_old[0] - A[2][1] * x_old[1]);
 
             //std::cout << std::fixed << std::setprecision(5);
             //std::cout << firstApprox << "   " << secondApprox << "   " << thirdApprox << std::endl;
@@ -256,10 +327,10 @@ std::vector<std::vector<double>> jacobi(std::vector<std::vector<double>> &A, std
         {
             x_old = x[0]; // save previous iteration
 
-            double firstApprox = (1 / A[0][0]) * (b[0][0] - A[0][1] * x_old[1] - A[0][2] * x_old[2] - A[0][3] * x_old[3]);
-            double secondApprox = (1 / A[1][1]) * (b[1][0] - A[1][0] * x_old[0] - A[1][2] * x_old[2] - A[1][3] * x_old[3]);
-            double thirdApprox = (1 / A[2][2]) * (b[2][0] - A[2][0] * x_old[0] - A[2][1] * x_old[1] - A[2][3] * x_old[3]);
-            double fourthApprox = (1 / A[3][3]) * (b[3][0] - A[3][0] * x_old[0] - A[3][1] * x_old[1] - A[3][2] * x_old[2]);
+            firstApprox = (1 / A[0][0]) * (b[0][0] - A[0][1] * x_old[1] - A[0][2] * x_old[2] - A[0][3] * x_old[3]);
+            secondApprox = (1 / A[1][1]) * (b[1][0] - A[1][0] * x_old[0] - A[1][2] * x_old[2] - A[1][3] * x_old[3]);
+            thirdApprox = (1 / A[2][2]) * (b[2][0] - A[2][0] * x_old[0] - A[2][1] * x_old[1] - A[2][3] * x_old[3]);
+            fourthApprox = (1 / A[3][3]) * (b[3][0] - A[3][0] * x_old[0] - A[3][1] * x_old[1] - A[3][2] * x_old[2]);
 
             //std::cout << std::fixed << std::setprecision(5);
             //std::cout << firstApprox << "   " << secondApprox << "   " << thirdApprox << "   " << fourthApprox << std::endl;
