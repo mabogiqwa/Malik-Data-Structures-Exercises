@@ -21,7 +21,7 @@ std::vector<double> gauss_seidel(std::vector<std::vector<double>> &v);
 //Precondition: The matrix must be strictly diagonally dominant to converge to a solution.
 //Postcondition: The function returns approximate solution values to the linear system.
 
-void jacobi(std::vector<std::vector<double>> &A, std::vector<std::vector<double>> &b, int iterations);
+std::vector<std::vector<double>> jacobi(std::vector<std::vector<double>> &A, std::vector<std::vector<double>> &b, int iterations);
 //Precondition: The matrix passed as arguments must be non-singular(det!=0) and square(rows=columns).
 //It is sufficient that the matrix is diagonally dominant for the system to converge to a solution.
 //Postcondition: The function returns approximate solution values to the linear system.
@@ -62,16 +62,22 @@ long double frobenius_norm(std::vector<std::vector<double>> &m);
 
 int main()
 {
-    std::vector<std::vector<double>> A(3, std::vector<double>(3));
-    A = {{3,-1,1},{3,6,2},{3,3,7}};
+    std::vector<std::vector<double>> A = {{3,-1,1},{3,6,2},{3,3,7}};
 
-    std::vector<std::vector<double>> b(1, std::vector<double>(3));
-    b = {{1},{0},{4}};
+    std::vector<std::vector<double>> b = {{1},{0},{4}};
 
-    std::vector<std::vector<double>> w(3, std::vector<double>(3));
-    w = {{4,1,2},{9,0,3},{2,3,7}};
+    std::vector<std::vector<double>> w = {{4,1,2},{9,0,3},{2,3,7}};
 
-    jacobi(A, b, 10);
+    //std::cout << jacobi(A, b, 10);
+
+    //Computing approximate inverse of A
+    std::vector<std::vector<double>> a_1 = {{1},{0},{0}};
+    std::vector<std::vector<double>> a_2 = {{0},{1},{0}};
+    std::vector<std::vector<double>> a_3 = {{0},{0},{1}};
+
+    std::cout << jacobi(A, a_1, 100);
+    std::cout << jacobi(A, a_2, 100);
+    std::cout << jacobi(A, a_3, 100);
 
     return 0;
 }
@@ -186,7 +192,7 @@ std::ostream& operator <<(std::ostream& os, const std::vector<std::vector<double
     return os;
 }
 
-void jacobi(std::vector<std::vector<double>> &A, std::vector<std::vector<double>> &b, int iterations)
+std::vector<std::vector<double>> jacobi(std::vector<std::vector<double>> &A, std::vector<std::vector<double>> &b, int iterations)
 {
     int rows = A.size();
     int cols = A[0].size();
@@ -199,7 +205,7 @@ void jacobi(std::vector<std::vector<double>> &A, std::vector<std::vector<double>
         x = {{0,0}}; //initial approximation
         std::vector<double> x_old(2, 0.0);
 
-        std::cout << "x1:         x2:" << std::endl;
+        //std::cout << "x1:         x2:" << std::endl;
         for (int iter = 0; iter < iterations; iter++)
         {
             x_old = x[0];
@@ -207,8 +213,8 @@ void jacobi(std::vector<std::vector<double>> &A, std::vector<std::vector<double>
             double firstApprox = (1 / A[0][0]) * (b[0][0] - A[0][1] * x_old[1]);
             double secondApprox = (1 / A[1][1]) * (b[1][0] - A[1][0] * x_old[0]);
 
-            std::cout << std::fixed << std::setprecision(5);
-            std::cout << firstApprox << "   " << secondApprox << std::endl;
+            //std::cout << std::fixed << std::setprecision(5);
+            //std::cout << firstApprox << "   " << secondApprox << std::endl;
             // update all values at once
             x[0][0] = firstApprox;
             x[0][1] = secondApprox;
@@ -221,7 +227,7 @@ void jacobi(std::vector<std::vector<double>> &A, std::vector<std::vector<double>
         x = {{0,0,0}}; //initial approximation
         std::vector<double> x_old(3, 0.0);
 
-        std::cout << "x1:         x2:       x3:" << std::endl;
+        //std::cout << "x1:         x2:       x3:" << std::endl;
         for (int iter = 0; iter < iterations; iter++)
         {
             x_old = x[0];
@@ -230,8 +236,8 @@ void jacobi(std::vector<std::vector<double>> &A, std::vector<std::vector<double>
             double secondApprox = (1 / A[1][1]) * (b[1][0] - A[1][0] * x_old[0] - A[1][2] * x_old[2]);
             double thirdApprox = (1 / A[2][2]) * (b[2][0] - A[2][0] * x_old[0] - A[2][1] * x_old[1]);
 
-            std::cout << std::fixed << std::setprecision(5);
-            std::cout << firstApprox << "   " << secondApprox << "   " << thirdApprox << std::endl;
+            //std::cout << std::fixed << std::setprecision(5);
+            //std::cout << firstApprox << "   " << secondApprox << "   " << thirdApprox << std::endl;
             // update all values at once
             x[0][0] = firstApprox;
             x[0][1] = secondApprox;
@@ -245,7 +251,7 @@ void jacobi(std::vector<std::vector<double>> &A, std::vector<std::vector<double>
         x = {{0,0,0,0}}; //initial approximation
         std::vector<double> x_old(4, 0.0);
 
-        std::cout << "x1:         x2:       x3:        x4:" << std::endl;
+        //std::cout << "x1:         x2:       x3:        x4:" << std::endl;
         for (int iter = 0; iter < iterations; iter++)
         {
             x_old = x[0]; // save previous iteration
@@ -255,8 +261,8 @@ void jacobi(std::vector<std::vector<double>> &A, std::vector<std::vector<double>
             double thirdApprox = (1 / A[2][2]) * (b[2][0] - A[2][0] * x_old[0] - A[2][1] * x_old[1] - A[2][3] * x_old[3]);
             double fourthApprox = (1 / A[3][3]) * (b[3][0] - A[3][0] * x_old[0] - A[3][1] * x_old[1] - A[3][2] * x_old[2]);
 
-            std::cout << std::fixed << std::setprecision(5);
-            std::cout << firstApprox << "   " << secondApprox << "   " << thirdApprox << "   " << fourthApprox << std::endl;
+            //std::cout << std::fixed << std::setprecision(5);
+            //std::cout << firstApprox << "   " << secondApprox << "   " << thirdApprox << "   " << fourthApprox << std::endl;
             // update all values at once
             x[0][0] = firstApprox;
             x[0][1] = secondApprox;
@@ -264,6 +270,8 @@ void jacobi(std::vector<std::vector<double>> &A, std::vector<std::vector<double>
             x[0][3] = fourthApprox;
         }
     }
+
+    return x;
 }
 
 std::vector<std::vector<double>> operator *(double scalar, std::vector<std::vector<double>> &m)
