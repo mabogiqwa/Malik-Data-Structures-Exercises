@@ -3,6 +3,7 @@
 #include <cmath>
 #include <vector>
 #include <limits>
+#include <iomanip>
 
 double det(std::vector<std::vector<double>> &m);
 //Precondition: The matrix must be a square matrix i.e. ROWS = COLUMNS where 2 <= ROWS, COLUMNS <= 4
@@ -20,16 +21,51 @@ std::vector<double> gauss_seidel(std::vector<std::vector<double>> &v);
 //Precondition: The matrix must be strictly diagonally dominant to converge to a solution.
 //Postcondition: The function returns approximate solution values to the linear system.
 
-std::vector<double> jacobi(std::vector<std::vector<double>> &v);
+std::vector<std::vector<double>> jacobi(std::vector<std::vector<double>> &A, std::vector<std::vector<double>> &b, int iterations)
+{
+    int rows = A.size();
+    int cols = A[0].size();
+    int n = 4;
+
+    std::vector<std::vector<double>> x;
+
+    if ((rows == 4) && (cols == 4)) {
+        double firstApprox, secondApprox, thirdApprox, fourthApprox;
+
+        x = {{0,0,0,0}}; //initial approximation
+        std::vector<double> x_old(n, 0.0);
+
+        std::cout << "x1:         x2:       x3:        x4:" << std::endl;
+        for (int iter = 0; iter < iterations; iter++)
+        {
+            x_old = x[0]; // save previous iteration
+
+            double firstApprox = (1 / A[0][0]) * (b[0][0] - A[0][1] * x_old[1] - A[0][2] * x_old[2] - A[0][3] * x_old[3]);
+            double secondApprox = (1 / A[1][1]) * (b[1][0] - A[1][0] * x_old[0] - A[1][2] * x_old[2] - A[1][3] * x_old[3]);
+            double thirdApprox = (1 / A[2][2]) * (b[2][0] - A[2][0] * x_old[0] - A[2][1] * x_old[1] - A[2][3] * x_old[3]);
+            double fourthApprox = (1 / A[3][3]) * (b[3][0] - A[3][0] * x_old[0] - A[3][1] * x_old[1] - A[3][2] * x_old[2]);
+
+            std::cout << std::fixed << std::setprecision(5);
+            std::cout << firstApprox << "   " << secondApprox << "   " << thirdApprox << "   " << fourthApprox << std::endl;
+            // update all values at once
+            x[0][0] = firstApprox;
+            x[0][1] = secondApprox;
+            x[0][2] = thirdApprox;
+            x[0][3] = fourthApprox;
+        }
+        }
+
+    return x;
+}
 //Precondition: The matrix passed as arguments must be non-singular(det!=0) and square(rows=columns).
 //It is sufficient that the matrix is diagonally dominant for the system to converge to a solution.
 //Postcondition: The function returns approximate solution values to the linear system.
 
-bool isStrictlyDiagonallyDominant(std::vector<std::vector<double>> &v)
+bool isStrictlyDiagonallyDominant(std::vector<std::vector<double>> &v);
 //Precondition: The given matrix/vector must be a square
 //Postcondition: Returns a boolean value indicated whether matrix is strictly diagonally dominant or not.
 
-std::vector<std::vector<double>> operator +(const std::vector<std::vector<double>> &m1, const std::vector<std::vector<double>> &m2);
+std::vector<std::vector<double>> operator +(std::vector<std::vector<double>> &m1, std::vector<std::vector<double>> &m2);
 //Precondition: The matrices passed as arguments must have the same dimensions i.e rows = columns
 //Postcondition: The function returns a vector which contains entries which are the difference of the corresponding
 //entries of the matrices/vectors passed as arguments.
@@ -61,13 +97,16 @@ long double frobenius_norm(std::vector<std::vector<double>> &m);
 
 int main()
 {
-    std::vector<std::vector<double>> v(3, std::vector<double>(3));
-    v = {{5, 1, 1},{2, 6, 1},{1, 1, 7}};
+    std::vector<std::vector<double>> v(4, std::vector<double>(4));
+    v = {{10,-1,2,0},{-1,11,-1,3},{2,-1,10,-1},{0,3,-1,8}};
+
+    std::vector<std::vector<double>> b(1, std::vector<double>(4));
+    b = {{6},{25},{-11},{15}};
 
     std::vector<std::vector<double>> w(2, std::vector<double>(4));
-    w = {{4,1},{9,0}};
+    w = {{4,1,2},{9,0,3},{2,3,7}};
 
-    std::cout << isStrictlyDiagonallyDominant(v);
+    std::cout << jacobi(v, b, 10);
 
     return 0;
 }
