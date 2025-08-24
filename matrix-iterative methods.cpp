@@ -75,7 +75,7 @@ int main()
 
     //std::cout << jacobi(A, b, 10);
 
-    //Computing approximate inverse of A
+    /*Computing approximate inverse of A
     std::vector<std::vector<double>> a_1 = {{1},{0},{0}};
     std::vector<std::vector<double>> a_2 = {{0},{1},{0}};
     std::vector<std::vector<double>> a_3 = {{0},{0},{1}};
@@ -83,6 +83,9 @@ int main()
     std::cout << gauss_seidel(A, a_1, 100);
     std::cout << gauss_seidel(A, a_2, 100);
     std::cout << gauss_seidel(A, a_3, 100);
+    */
+    std::cout << A << std::endl;
+    std::cout << transpose(A);
 
     return 0;
 }
@@ -138,6 +141,22 @@ long double taxicab_norm(std::vector<std::vector<double>> &m)
     }
 
     return absSum;
+}
+
+std::vector<std::vector<double>> transpose(std::vector<std::vector<double>> &X)
+{
+    int rows = X.size();
+    int cols = X[0].size();
+
+    std::vector<std::vector<double>> Xt(cols, std::vector<double>(rows));
+
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            Xt[j][i] = X[i][j];
+        }
+    }
+
+    return Xt;
 }
 
 bool isStrictlyDiagonallyDominant(std::vector<std::vector<double>> &v)
