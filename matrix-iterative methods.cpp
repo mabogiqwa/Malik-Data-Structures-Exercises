@@ -17,85 +17,19 @@ std::vector<std::vector<double>> operator *(std::vector<std::vector<double>> &m1
 std::ostream& operator <<(std::ostream& os, const std::vector<std::vector<double>> &m);
 //Postcondition: Prints the entries of a matrix/vector.
 
-std::vector<std::vector<double>> gauss_seidel(std::vector<std::vector<double>> &A, std::vector<std::vector<double>> &b, int iterations)
-{
-    int rows = A.size();
-    int cols = A[0].size();
-
-    std::vector<std::vector<double>> x;
-
-    if ((rows == 2) && (cols == 2)) {
-        double firstApprox, secondApprox;
-
-        x = {{0,0}}; //initial approximation
-
-        //std::cout << "x1:         x2:" << std::endl;
-        for (int iter = 0; iter < iterations; iter++)
-        {
-            firstApprox = (1 / A[0][0]) * (b[0][0] - A[0][1] * x[0][1]);
-            x[0][0] = firstApprox;
-            secondApprox = (1 / A[1][1]) * (b[1][0] - A[1][0] * x[0][0]);
-            x[0][1] = secondApprox;
-
-            //std::cout << std::fixed << std::setprecision(5);
-            //std::cout << firstApprox << "   " << secondApprox << std::endl;
-            // update all values at once
-        }
-    }
-
-    if ((rows == 3) && (cols == 3)) { //This case is not tested
-        double firstApprox, secondApprox, thirdApprox;
-
-        x = {{0,0,0}}; //initial approximation
-
-        //std::cout << "x1:         x2:       x3:" << std::endl;
-        for (int iter = 0; iter < iterations; iter++)
-        {
-            firstApprox = (1 / A[0][0]) * (b[0][0] - A[0][1] * x[0][1] - A[0][2] * x[0][2]);
-            x[0][0] = firstApprox;
-            secondApprox = (1 / A[1][1]) * (b[1][0] - A[1][0] * x[0][0] - A[1][2] * x[0][2]);
-            x[0][1] = secondApprox;
-            thirdApprox = (1 / A[2][2]) * (b[2][0] - A[2][0] * x[0][0] - A[2][1] * x[0][1]);
-            x[0][2] = thirdApprox;
-
-            //std::cout << std::fixed << std::setprecision(5);
-            //std::cout << firstApprox << "   " << secondApprox << "   " << thirdApprox << std::endl;
-            // update all values at once
-        }
-    }
-
-    if ((rows == 4) && (cols == 4)) {
-        double firstApprox, secondApprox, thirdApprox, fourthApprox;
-
-        x = {{0,0,0,0}}; //initial approximation
-
-        //std::cout << "x1:         x2:       x3:        x4:" << std::endl;
-        for (int iter = 0; iter < iterations; iter++)
-        {
-            firstApprox = (1 / A[0][0]) * (b[0][0] - A[0][1] * x[0][1] - A[0][2] * x[0][2] - A[0][3] * x[0][3]);
-            x[0][0] = firstApprox;
-            secondApprox = (1 / A[1][1]) * (b[1][0] - A[1][0] * x[0][0] - A[1][2] * x[0][2] - A[1][3] * x[0][3]);
-            x[0][1] = secondApprox;
-            thirdApprox = (1 / A[2][2]) * (b[2][0] - A[2][0] * x[0][0] - A[2][1] * x[0][1] - A[2][3] * x[0][3]);
-            x[0][2] = thirdApprox;
-            fourthApprox = (1 / A[3][3]) * (b[3][0] - A[3][0] * x[0][0] - A[3][1] * x[0][1] - A[3][2] * x[0][2]);
-            x[0][3] = fourthApprox;
-
-            //std::cout << std::fixed << std::setprecision(5);
-            //std::cout << firstApprox << "   " << secondApprox << "   " << thirdApprox << "   " << fourthApprox << std::endl;
-            // update all values at once
-        }
-    }
-
-    return x;
-}
+std::vector<std::vector<double>> gauss_seidel(std::vector<std::vector<double>> &A, std::vector<std::vector<double>> &b, int iterations);
 //Precondition: The matrix must be strictly diagonally dominant to converge to a solution.
 //Postcondition: The function returns approximate solution values to the linear system.
 
 std::vector<std::vector<double>> jacobi(std::vector<std::vector<double>> &A, std::vector<std::vector<double>> &b, int iterations);
-//Precondition: The matrix passed as arguments must be non-singular(det!=0) and square(rows=columns).
+//Precondition: The matrices passed as arguments must be non-singular(det!=0) and square(rows=columns).
 //It is sufficient that the matrix is diagonally dominant for the system to converge to a solution.
 //Postcondition: The function returns approximate solution values to the linear system.
+
+std::vector<std::vector<double>> transpose(std::vector<std::vector<double>> &X);
+//Precondition: The matrix must be populated with valid values
+//Postcondition: The function transposes the given matrix, a process where the value of the rows switches with the
+//value of the columns and returns the transposed matrix.
 
 bool isStrictlyDiagonallyDominant(std::vector<std::vector<double>> &v);
 //Precondition: The given matrix/vector must be a square
@@ -146,9 +80,9 @@ int main()
     std::vector<std::vector<double>> a_2 = {{0},{1},{0}};
     std::vector<std::vector<double>> a_3 = {{0},{0},{1}};
 
-    std::cout << jacobi(A, a_1, 100);
-    std::cout << jacobi(A, a_2, 100);
-    std::cout << jacobi(A, a_3, 100);
+    std::cout << gauss_seidel(A, a_1, 100);
+    std::cout << gauss_seidel(A, a_2, 100);
+    std::cout << gauss_seidel(A, a_3, 100);
 
     return 0;
 }
@@ -261,6 +195,79 @@ std::ostream& operator <<(std::ostream& os, const std::vector<std::vector<double
         std::cout << std::endl;
     }
     return os;
+}
+
+std::vector<std::vector<double>> gauss_seidel(std::vector<std::vector<double>> &A, std::vector<std::vector<double>> &b, int iterations)
+{
+    int rows = A.size();
+    int cols = A[0].size();
+
+    std::vector<std::vector<double>> x;
+
+    if ((rows == 2) && (cols == 2)) {
+        double firstApprox, secondApprox;
+
+        x = {{0,0}}; //initial approximation
+
+        //std::cout << "x1:         x2:" << std::endl;
+        for (int iter = 0; iter < iterations; iter++)
+        {
+            firstApprox = (1 / A[0][0]) * (b[0][0] - A[0][1] * x[0][1]);
+            x[0][0] = firstApprox;
+            secondApprox = (1 / A[1][1]) * (b[1][0] - A[1][0] * x[0][0]);
+            x[0][1] = secondApprox;
+
+            //std::cout << std::fixed << std::setprecision(5);
+            //std::cout << firstApprox << "   " << secondApprox << std::endl;
+            // update all values at once
+        }
+    }
+
+    if ((rows == 3) && (cols == 3)) { //This case is not tested
+        double firstApprox, secondApprox, thirdApprox;
+
+        x = {{0,0,0}}; //initial approximation
+
+        //std::cout << "x1:         x2:       x3:" << std::endl;
+        for (int iter = 0; iter < iterations; iter++)
+        {
+            firstApprox = (1 / A[0][0]) * (b[0][0] - A[0][1] * x[0][1] - A[0][2] * x[0][2]);
+            x[0][0] = firstApprox;
+            secondApprox = (1 / A[1][1]) * (b[1][0] - A[1][0] * x[0][0] - A[1][2] * x[0][2]);
+            x[0][1] = secondApprox;
+            thirdApprox = (1 / A[2][2]) * (b[2][0] - A[2][0] * x[0][0] - A[2][1] * x[0][1]);
+            x[0][2] = thirdApprox;
+
+            //std::cout << std::fixed << std::setprecision(5);
+            //std::cout << firstApprox << "   " << secondApprox << "   " << thirdApprox << std::endl;
+            // update all values at once
+        }
+    }
+
+    if ((rows == 4) && (cols == 4)) {
+        double firstApprox, secondApprox, thirdApprox, fourthApprox;
+
+        x = {{0,0,0,0}}; //initial approximation
+
+        //std::cout << "x1:         x2:       x3:        x4:" << std::endl;
+        for (int iter = 0; iter < iterations; iter++)
+        {
+            firstApprox = (1 / A[0][0]) * (b[0][0] - A[0][1] * x[0][1] - A[0][2] * x[0][2] - A[0][3] * x[0][3]);
+            x[0][0] = firstApprox;
+            secondApprox = (1 / A[1][1]) * (b[1][0] - A[1][0] * x[0][0] - A[1][2] * x[0][2] - A[1][3] * x[0][3]);
+            x[0][1] = secondApprox;
+            thirdApprox = (1 / A[2][2]) * (b[2][0] - A[2][0] * x[0][0] - A[2][1] * x[0][1] - A[2][3] * x[0][3]);
+            x[0][2] = thirdApprox;
+            fourthApprox = (1 / A[3][3]) * (b[3][0] - A[3][0] * x[0][0] - A[3][1] * x[0][1] - A[3][2] * x[0][2]);
+            x[0][3] = fourthApprox;
+
+            //std::cout << std::fixed << std::setprecision(5);
+            //std::cout << firstApprox << "   " << secondApprox << "   " << thirdApprox << "   " << fourthApprox << std::endl;
+            // update all values at once
+        }
+    }
+
+    return x;
 }
 
 std::vector<std::vector<double>> jacobi(std::vector<std::vector<double>> &A, std::vector<std::vector<double>> &b, int iterations)
