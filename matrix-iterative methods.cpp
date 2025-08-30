@@ -31,6 +31,17 @@ std::vector<std::vector<double>> transpose(std::vector<std::vector<double>> &X);
 //Postcondition: The function transposes the given matrix, a process where the value of the rows switches with the
 //value of the columns and returns the transposed matrix.
 
+std::vector<std::vector<double>> pow(std::vector<std::vector<double>> &X, int pow)
+{
+    std::vector<std::vector<double>> result = X;
+
+    for (int i = 1; i < pow; i++) {
+        result = result * X;
+    }
+
+    return result;
+}
+
 bool isStrictlyDiagonallyDominant(std::vector<std::vector<double>> &v);
 //Precondition: The given matrix/vector must be a square
 //Postcondition: Returns a boolean value indicated whether matrix is strictly diagonally dominant or not.
@@ -67,7 +78,7 @@ long double frobenius_norm(std::vector<std::vector<double>> &m);
 
 int main()
 {
-    std::vector<std::vector<double>> A = {{3,-1,1},{3,6,2},{3,3,7}};
+    std::vector<std::vector<double>> A = {{5,2},{15,3}};
 
     std::vector<std::vector<double>> b = {{1},{0},{4}};
 
@@ -84,8 +95,9 @@ int main()
     std::cout << gauss_seidel(A, a_2, 100);
     std::cout << gauss_seidel(A, a_3, 100);
     */
-    std::cout << A << std::endl;
-    std::cout << transpose(A);
+    //std::cout << A << std::endl;
+    //std::cout << transpose(A);
+    std::cout << pow(A, 5);
 
     return 0;
 }
