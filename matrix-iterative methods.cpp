@@ -71,7 +71,7 @@ long double frobenius_norm(std::vector<std::vector<double>> &m);
 
 int main()
 {
-    std::vector<std::vector<double>> A = {{5,2},{15,3}};
+    std::vector<std::vector<double>> A = {{5,2, 0},{15,3, 4}};
 
     std::vector<std::vector<double>> b = {{1},{0},{4}};
 
@@ -98,10 +98,18 @@ int main()
 std::vector<std::vector<double>> pow(std::vector<std::vector<double>> &X, int pow)
 {
     std::vector<std::vector<double>> result = X;
+    int rows = X.size();
+    int cols = X[0].size();
 
-    for (int i = 1; i < pow; i++) {
-        result = result * X;
+    if (rows != cols) {
+        std::cout << "Mismatch between rows and columns" << std::endl;
+        return {{}};
+    } else {
+        for (int i = 1; i < pow; i++) {
+            result = result * X;
+        }
     }
+
 
     return result;
 }
