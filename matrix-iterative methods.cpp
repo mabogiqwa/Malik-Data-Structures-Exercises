@@ -31,16 +31,9 @@ std::vector<std::vector<double>> transpose(std::vector<std::vector<double>> &X);
 //Postcondition: The function transposes the given matrix, a process where the value of the rows switches with the
 //value of the columns and returns the transposed matrix.
 
-std::vector<std::vector<double>> pow(std::vector<std::vector<double>> &X, int pow)
-{
-    std::vector<std::vector<double>> result = X;
-
-    for (int i = 1; i < pow; i++) {
-        result = result * X;
-    }
-
-    return result;
-}
+std::vector<std::vector<double>> pow(std::vector<std::vector<double>> &X, int pow);
+//Precondition: The number of rows and columns must have the same size
+//Postcondition: Returns the power of a matrix
 
 bool isStrictlyDiagonallyDominant(std::vector<std::vector<double>> &v);
 //Precondition: The given matrix/vector must be a square
@@ -100,6 +93,17 @@ int main()
     std::cout << pow(A, 5);
 
     return 0;
+}
+
+std::vector<std::vector<double>> pow(std::vector<std::vector<double>> &X, int pow)
+{
+    std::vector<std::vector<double>> result = X;
+
+    for (int i = 1; i < pow; i++) {
+        result = result * X;
+    }
+
+    return result;
 }
 
 long double frobenius_norm(std::vector<std::vector<double>> &m)
