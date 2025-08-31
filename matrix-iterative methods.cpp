@@ -1,4 +1,6 @@
 //Created: 20-08-2025
+//Going to overload the iterative methods to stop after reaching
+//a certain error threshold
 #include <iostream>
 #include <cmath>
 #include <vector>
@@ -69,6 +71,26 @@ long double frobenius_norm(std::vector<std::vector<double>> &m);
 //Precondition: The passed value must be of type std::vector<std::vector<double>>
 //Postcondition: The functions a long double value which is the frobenius norm.
 
+std::vector<std::vector<double>> inv(std::vector<std::vector<double>> &m);
+//Precondition: The argument matrix must be square (row=cols), singular(det!=0), and 2 <= row,cols <= 5
+//Postcondition: The function returns an approximated inverse using the gauss-seidel
+
+int main()
+{
+    std::vector<std::vector<double>> A = {{4,1,0,0},
+                                          {1,5,1,0},
+                                          {0,1,6,1},
+                                          {0,0,1,7}};
+
+    std::vector<std::vector<double>> b = {{1},{0},{4}};
+
+    std::vector<std::vector<double>> w = {{4,1,2},{9,0,3},{2,3,7}};
+
+    std::cout << inv(A);
+
+    return 0;
+}
+
 std::vector<std::vector<double>> inv(std::vector<std::vector<double>> &m) {
     int rows = m.size();
     int cols = m[0].size();
@@ -77,7 +99,7 @@ std::vector<std::vector<double>> inv(std::vector<std::vector<double>> &m) {
 
     determinant = det(m);
 
-    if (determinant != 0) {
+    if ((determinant != 0) && (row == cols)) {
         if ((rows == 2) && (cols == 2)) {
             double scalar = 1.0/(m[0][0]*m[1][1] - m[0][1]*m[1][0]);
             result = {{m[1][1], -m[0][1]},{-m[1][0], m[0][0]}};
@@ -136,27 +158,11 @@ std::vector<std::vector<double>> inv(std::vector<std::vector<double>> &m) {
                     {col1[0][4],col2[0][4],col3[0][4],col4[0][4],col5[0][4]}};
         }
     } else {
-        std::cout << "Matrix is singular." << std::endl;
+        std::cout << "Matrix is singular or the matrix is not square" << std::endl;
         return {{}};
     }
 
     return result;
-}
-
-int main()
-{
-    std::vector<std::vector<double>> A = {{4,1,0,0},
-                                          {1,5,1,0},
-                                          {0,1,6,1},
-                                          {0,0,1,7}};
-
-    std::vector<std::vector<double>> b = {{1},{0},{4}};
-
-    std::vector<std::vector<double>> w = {{4,1,2},{9,0,3},{2,3,7}};
-
-    std::cout << inv(A);
-
-    return 0;
 }
 
 std::vector<std::vector<double>> pow(std::vector<std::vector<double>> &X, int pow)
