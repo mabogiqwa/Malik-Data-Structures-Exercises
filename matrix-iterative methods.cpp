@@ -18,7 +18,7 @@ std::ostream& operator <<(std::ostream& os, const std::vector<std::vector<double
 //Postcondition: Prints the entries of a matrix/vector.
 
 std::vector<std::vector<double>> gauss_seidel(std::vector<std::vector<double>> &A, std::vector<std::vector<double>> &b, int iterations);
-//Precondition: The matrix must be strictly diagonally dominant to converge to a solution.
+//Precondition: The matrix must be strictly diagonally dominant to converge to a solution and the matrix must be square i.e. ROWS = COLUMNS where 2 <= ROWS, COLUMNS <= 4
 //Postcondition: The function returns approximate solution values to the linear system.
 
 std::vector<std::vector<double>> jacobi(std::vector<std::vector<double>> &A, std::vector<std::vector<double>> &b, int iterations);
@@ -69,28 +69,92 @@ long double frobenius_norm(std::vector<std::vector<double>> &m);
 //Precondition: The passed value must be of type std::vector<std::vector<double>>
 //Postcondition: The functions a long double value which is the frobenius norm.
 
+std::vector<std::vector<double>> inv(std::vector<std::vector<double>> &m) {
+    int rows = m.size();
+    int cols = m[0].size();
+    std::vector<std::vector<double>> result;
+    int determinant;
+
+    determinant = det(m);
+
+    if (determinant != 0) {
+        if ((rows == 2) && (cols == 2)) {
+            double scalar = 1.0/(m[0][0]*m[1][1] - m[0][1]*m[1][0]);
+            result = {{m[1][1], -m[0][1]},{-m[1][0], m[0][0]}};
+
+            result = scalar * result;
+        }
+        if ((rows == 3) && (cols == 3)) {
+            //standard vectors
+            std::vector<std::vector<double>> a_1 = {{1},{0},{0}};
+            std::vector<std::vector<double>> a_2 = {{0},{1},{0}};
+            std::vector<std::vector<double>> a_3 = {{0},{0},{1}};
+
+            std::vector<std::vector<double>> col1 = gauss_seidel(m, a_1, 50);
+            std::vector<std::vector<double>> col2 = gauss_seidel(m, a_2, 50);
+            std::vector<std::vector<double>> col3 = gauss_seidel(m, a_3, 50);
+
+            return {{col1[0][0],col2[0][0],col3[0][0]},
+                    {col1[0][1],col2[0][1],col3[0][1]},
+                    {col1[0][2],col2[0][2],col3[0][2]}};
+        }
+        if ((rows == 4) & (cols == 4)) {
+            //Standard vectors
+            std::vector<std::vector<double>> a_1 = {{1},{0},{0},{0}};
+            std::vector<std::vector<double>> a_2 = {{0},{1},{0},{0}};
+            std::vector<std::vector<double>> a_3 = {{0},{0},{1},{0}};
+            std::vector<std::vector<double>> a_4 = {{0},{0},{0},{1}};
+
+            std::vector<std::vector<double>> col1 = gauss_seidel(m, a_1, 50);
+            std::vector<std::vector<double>> col2 = gauss_seidel(m, a_2, 50);
+            std::vector<std::vector<double>> col3 = gauss_seidel(m, a_3, 50);
+            std::vector<std::vector<double>> col4 = gauss_seidel(m, a_4, 50);
+
+            return {{col1[0][0],col2[0][0],col3[0][0],col4[0][0]},
+                    {col1[0][1],col2[0][1],col3[0][1],col4[0][1]},
+                    {col1[0][2],col2[0][2],col3[0][2],col4[0][2]},
+                    {col1[0][3],col2[0][3],col3[0][3],col4[0][3]}};
+        }
+        if ((rows == 5) && (cols == 5)) {
+            //Standard vectors
+            std::vector<std::vector<double>> a_1 = {{1},{0},{0},{0},{0}};
+            std::vector<std::vector<double>> a_2 = {{0},{1},{0},{0},{0}};
+            std::vector<std::vector<double>> a_3 = {{0},{0},{1},{0},{0}};
+            std::vector<std::vector<double>> a_4 = {{0},{0},{0},{1},{0}};
+            std::vector<std::vector<double>> a_5 = {{0},{0},{0},{0},{1}};
+
+            std::vector<std::vector<double>> col1 = gauss_seidel(m, a_1, 50);
+            std::vector<std::vector<double>> col2 = gauss_seidel(m, a_2, 50);
+            std::vector<std::vector<double>> col3 = gauss_seidel(m, a_3, 50);
+            std::vector<std::vector<double>> col4 = gauss_seidel(m, a_4, 50);
+            std::vector<std::vector<double>> col5 = gauss_seidel(m, a_5, 50);
+
+            return {{col1[0][0],col2[0][0],col3[0][0],col4[0][0],col5[0][0]},
+                    {col1[0][1],col2[0][1],col3[0][1],col4[0][1],col5[0][1]},
+                    {col1[0][2],col2[0][2],col3[0][2],col4[0][2],col5[0][2]},
+                    {col1[0][3],col2[0][3],col3[0][3],col4[0][3],col5[0][3]},
+                    {col1[0][4],col2[0][4],col3[0][4],col4[0][4],col5[0][4]}};
+        }
+    } else {
+        std::cout << "Matrix is singular." << std::endl;
+        return {{}};
+    }
+
+    return result;
+}
+
 int main()
 {
-    std::vector<std::vector<double>> A = {{5,2, 0},{15,3, 4}};
+    std::vector<std::vector<double>> A = {{4,1,0,0},
+                                          {1,5,1,0},
+                                          {0,1,6,1},
+                                          {0,0,1,7}};
 
     std::vector<std::vector<double>> b = {{1},{0},{4}};
 
     std::vector<std::vector<double>> w = {{4,1,2},{9,0,3},{2,3,7}};
 
-    //std::cout << jacobi(A, b, 10);
-
-    /*Computing approximate inverse of A
-    std::vector<std::vector<double>> a_1 = {{1},{0},{0}};
-    std::vector<std::vector<double>> a_2 = {{0},{1},{0}};
-    std::vector<std::vector<double>> a_3 = {{0},{0},{1}};
-
-    std::cout << gauss_seidel(A, a_1, 100);
-    std::cout << gauss_seidel(A, a_2, 100);
-    std::cout << gauss_seidel(A, a_3, 100);
-    */
-    //std::cout << A << std::endl;
-    //std::cout << transpose(A);
-    std::cout << pow(A, 5);
+    std::cout << inv(A);
 
     return 0;
 }
