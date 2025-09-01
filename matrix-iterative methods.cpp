@@ -1,6 +1,7 @@
 //Created: 20-08-2025
 //Going to overload the iterative methods to stop after reaching
 //a certain error threshold
+//Going to add iterative methods for differential linear systems
 #include <iostream>
 #include <cmath>
 #include <vector>
@@ -32,6 +33,32 @@ std::vector<std::vector<double>> transpose(std::vector<std::vector<double>> &X);
 //Precondition: The matrix must be populated with valid values
 //Postcondition: The function transposes the given matrix, a process where the value of the rows switches with the
 //value of the columns and returns the transposed matrix.
+
+double dot(std::vector<std::vector<double>> &X) {
+    int rows = X.size();
+    int cols = X[0].size();
+    double sum = 0;
+
+    if ((cols != 1) && (rows != 1)) {
+        std::cout << "Input vector not a row or column vector" << std::endl;
+        return -1;
+    }
+
+    //row vector
+    if (rows == 1) {
+        for (int i = 0; i < cols; i++) {
+            sum += X[0][i];
+        }
+    }
+    //column vector
+    if (cols == 1) {
+        for (int j = 0; j < rows; j++) {
+            sum += X[j][0];
+        }
+    }
+
+    return sum;
+}
 
 std::vector<std::vector<double>> pow(std::vector<std::vector<double>> &X, int pow);
 //Precondition: The number of rows and columns must have the same size
@@ -77,16 +104,13 @@ std::vector<std::vector<double>> inv(std::vector<std::vector<double>> &m);
 
 int main()
 {
-    std::vector<std::vector<double>> A = {{4,1,0,0},
-                                          {1,5,1,0},
-                                          {0,1,6,1},
-                                          {0,0,1,7}};
+    std::vector<std::vector<double>> A = {{4,5},{1,2}};
 
     std::vector<std::vector<double>> b = {{1},{0},{4}};
 
     std::vector<std::vector<double>> w = {{4,1,2},{9,0,3},{2,3,7}};
 
-    std::cout << inv(A);
+    std::cout << dot(A);
 
     return 0;
 }
@@ -94,12 +118,12 @@ int main()
 std::vector<std::vector<double>> inv(std::vector<std::vector<double>> &m) {
     int rows = m.size();
     int cols = m[0].size();
-    std::vector<std::vector<double>> result;
+    std::vector<std::vector<double>> result = {{}};
     int determinant;
 
     determinant = det(m);
 
-    if ((determinant != 0) && (row == cols)) {
+    if ((determinant != 0) && (rows == cols)) {
         if ((rows == 2) && (cols == 2)) {
             double scalar = 1.0/(m[0][0]*m[1][1] - m[0][1]*m[1][0]);
             result = {{m[1][1], -m[0][1]},{-m[1][0], m[0][0]}};
