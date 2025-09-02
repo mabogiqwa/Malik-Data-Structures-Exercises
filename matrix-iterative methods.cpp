@@ -88,20 +88,20 @@ double power_method(std::vector<std::vector<double>> &A, std::vector<std::vector
     double eigenVApprox = 0;
 
     euclidNorm = euclid_norm(X);
-    //std::cout << euclidNorm << std::endl;
     x_i = (1.0/euclidNorm)*X; //this is fine
-    std::cout << x_i;
 
-    for (int i = 0; i < iterations; i++) {
-        //y_i = A * x_i; //this is fine
+    for (int i = 0; i < 3; i++) {
+        y_i = A * x_i; //this is fine
 
-        /*
         euclidNorm = euclid_norm(y_i);
+        //std::cout << "Euclid norm: " << euclidNorm << std::endl;
         nextX = (1/euclidNorm)*y_i;
+        //std::cout << "Next value of X: " << nextX << std::endl;
         transposeOfX = transpose(x_i);
-        eigenVApprox = dot(transposeOfX, y_i);
-        std::cout << eigenVApprox << std::endl;
-        */
+        //std::cout << transposeOfX;
+        eigenVApprox = dot(x_i, y_i);
+        std::cout << "Eigenvalue approximation: " << eigenVApprox << std::endl;
+        x_i = nextX;
     }
 
     return eigenVApprox;
@@ -109,9 +109,9 @@ double power_method(std::vector<std::vector<double>> &A, std::vector<std::vector
 
 int main()
 {
-    std::vector<std::vector<double>> A = {{2,1,1},{1,2,1},{1,1,2}};
+    std::vector<std::vector<double>> A = {{4,1},{2,3}};
 
-    std::vector<std::vector<double>> X = {{1},{1},{1}};
+    std::vector<std::vector<double>> X = {{1},{1}};
 
     std::vector<std::vector<double>> w = {{4,1,2},{9,0,3},{2,3,7}};
 
