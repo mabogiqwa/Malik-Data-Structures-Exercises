@@ -34,30 +34,12 @@ std::vector<std::vector<double>> transpose(std::vector<std::vector<double>> &X);
 //Postcondition: The function transposes the given matrix, a process where the value of the rows switches with the
 //value of the columns and returns the transposed matrix.
 
-double dot(std::vector<std::vector<double>> &X) {
-    int rows = X.size();
-    int cols = X[0].size();
-    double sum = 0;
+double dot(std::vector<std::vector<double>> &m1, std::vector<std::vector<double>> &m2);
+//Precondition: The input vector must be a row or column vector.
+//Postcondition: Returns the dot product of the vector.
 
-    if ((cols != 1) && (rows != 1)) {
-        std::cout << "Input vector not a row or column vector" << std::endl;
-        return -1;
-    }
+double power_method(std::vector<std::vector<double>> &A, std::vector<double> &X, int iterations) {
 
-    //row vector
-    if (rows == 1) {
-        for (int i = 0; i < cols; i++) {
-            sum += X[0][i];
-        }
-    }
-    //column vector
-    if (cols == 1) {
-        for (int j = 0; j < rows; j++) {
-            sum += X[j][0];
-        }
-    }
-
-    return sum;
 }
 
 std::vector<std::vector<double>> pow(std::vector<std::vector<double>> &X, int pow);
@@ -104,15 +86,43 @@ std::vector<std::vector<double>> inv(std::vector<std::vector<double>> &m);
 
 int main()
 {
-    std::vector<std::vector<double>> A = {{4,5},{1,2}};
+    std::vector<std::vector<double>> A = {{4},{1},{2},{5}};
 
-    std::vector<std::vector<double>> b = {{1},{0},{4}};
+    std::vector<std::vector<double>> B = {{3},{1},{4},{7}};
 
     std::vector<std::vector<double>> w = {{4,1,2},{9,0,3},{2,3,7}};
 
-    std::cout << dot(A);
+    std::cout << dot(A,B);
 
     return 0;
+}
+
+double dot(std::vector<std::vector<double>> &m1, std::vector<std::vector<double>> &m2) {
+    int rows1 = m1.size();
+    int cols1 = m1[0].size();
+    int rows2 = m2.size();
+    int cols2 = m2[0].size();
+    double sum = 0;
+
+    if ((cols1 != 1) && (rows1 != 1)) {
+        std::cout << "Input vector not a row or column vector" << std::endl;
+        return -1;
+    }
+
+    if ((rows1 == rows2) && (cols1 == cols2)) {
+        if (rows1 == 1) {
+            for (int i = 0; i < cols1; i++) {
+                sum += m1[0][i]*m2[0][i];
+            }
+        }
+        if (cols1 == 1) {
+            for (int j = 0; j < rows1; j++) {
+                sum += m1[j][0]*m2[j][0];
+            }
+        }
+    }
+
+    return sum;
 }
 
 std::vector<std::vector<double>> inv(std::vector<std::vector<double>> &m) {
