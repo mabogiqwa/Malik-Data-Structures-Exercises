@@ -36,11 +36,7 @@ std::vector<std::vector<double>> transpose(std::vector<std::vector<double>> &X);
 
 double dot(std::vector<std::vector<double>> &m1, std::vector<std::vector<double>> &m2);
 //Precondition: The input vector must be a row or column vector.
-//Postcondition: Returns the dot product of the vector.
-
-double power_method(std::vector<std::vector<double>> &A, std::vector<double> &X, int iterations) {
-
-}
+//Postcondition: Returns the dot product of two row/column vectors.
 
 std::vector<std::vector<double>> pow(std::vector<std::vector<double>> &X, int pow);
 //Precondition: The number of rows and columns must have the same size
@@ -84,15 +80,42 @@ std::vector<std::vector<double>> inv(std::vector<std::vector<double>> &m);
 //Precondition: The argument matrix must be square (row=cols), singular(det!=0), and 2 <= row,cols <= 5
 //Postcondition: The function returns an approximated inverse using the gauss-seidel
 
+double power_method(std::vector<std::vector<double>> &A, std::vector<std::vector<double>> &X, int iterations) {
+    long double euclidNorm;
+    std::vector<std::vector<double>> x_i, nextX;
+    std::vector<std::vector<double>> y_i;
+    std::vector<std::vector<double>> transposeOfX;
+    double eigenVApprox = 0;
+
+    euclidNorm = euclid_norm(X);
+    //std::cout << euclidNorm << std::endl;
+    x_i = (1.0/euclidNorm)*X; //this is fine
+    std::cout << x_i;
+
+    for (int i = 0; i < iterations; i++) {
+        //y_i = A * x_i; //this is fine
+
+        /*
+        euclidNorm = euclid_norm(y_i);
+        nextX = (1/euclidNorm)*y_i;
+        transposeOfX = transpose(x_i);
+        eigenVApprox = dot(transposeOfX, y_i);
+        std::cout << eigenVApprox << std::endl;
+        */
+    }
+
+    return eigenVApprox;
+}
+
 int main()
 {
-    std::vector<std::vector<double>> A = {{4},{1},{2},{5}};
+    std::vector<std::vector<double>> A = {{2,1,1},{1,2,1},{1,1,2}};
 
-    std::vector<std::vector<double>> B = {{3},{1},{4},{7}};
+    std::vector<std::vector<double>> X = {{1},{1},{1}};
 
     std::vector<std::vector<double>> w = {{4,1,2},{9,0,3},{2,3,7}};
 
-    std::cout << dot(A,B);
+    power_method(A, X, 3);
 
     return 0;
 }
