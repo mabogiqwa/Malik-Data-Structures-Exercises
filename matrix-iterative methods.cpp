@@ -2,11 +2,19 @@
 //Going to overload the iterative methods to stop after reaching
 //a certain error threshold
 //Going to add iterative methods for differential linear systems
+//Need to edit the definition of dot() to allow the computation of the dot
+//product of a column and row vector.
 #include <iostream>
 #include <cmath>
 #include <vector>
 #include <limits>
 #include <iomanip>
+
+struct EigenResult
+{
+    std::vector<std::vector<double>> eigenVector;
+    double eigenvalue;
+};
 
 double det(std::vector<std::vector<double>> &m);
 //Precondition: The matrix must be a square matrix i.e. ROWS = COLUMNS where 2 <= ROWS, COLUMNS <= 4
@@ -80,31 +88,17 @@ std::vector<std::vector<double>> inv(std::vector<std::vector<double>> &m);
 //Precondition: The argument matrix must be square (row=cols), singular(det!=0), and 2 <= row,cols <= 5
 //Postcondition: The function returns an approximated inverse using the gauss-seidel
 
-double power_method(std::vector<std::vector<double>> &A, std::vector<std::vector<double>> &X, int iterations) {
-    long double euclidNorm;
-    std::vector<std::vector<double>> x_i, nextX;
-    std::vector<std::vector<double>> y_i;
-    std::vector<std::vector<double>> transposeOfX;
-    double eigenVApprox = 0;
+EigenResult power_method(std::vector<std::vector<double>> &A, std::vector<std::vector<double>> &X, int iterations);
+//Precondition: The passed matrix must be square(rows=cols)
+//Postcondition: The method returns the dominant eigenvalue and associated eigenvector
 
-    euclidNorm = euclid_norm(X);
-    x_i = (1.0/euclidNorm)*X; //this is fine
+std::ostream& operator <<(std::ostream &os, EigenResult &result) {
+    std::cout << "Eigenvalue: " << result.eigenvalue << std::endl;
+    std::cout << "Eigenresult: " << std::endl;
+    std::cout << result.eigenVector;
+    std::cout << std::endl;
 
-    for (int i = 0; i < 3; i++) {
-        y_i = A * x_i; //this is fine
-
-        euclidNorm = euclid_norm(y_i);
-        //std::cout << "Euclid norm: " << euclidNorm << std::endl;
-        nextX = (1/euclidNorm)*y_i;
-        //std::cout << "Next value of X: " << nextX << std::endl;
-        transposeOfX = transpose(x_i);
-        //std::cout << transposeOfX;
-        eigenVApprox = dot(x_i, y_i);
-        std::cout << "Eigenvalue approximation: " << eigenVApprox << std::endl;
-        x_i = nextX;
-    }
-
-    return eigenVApprox;
+    return os;
 }
 
 int main()
@@ -115,9 +109,35 @@ int main()
 
     std::vector<std::vector<double>> w = {{4,1,2},{9,0,3},{2,3,7}};
 
-    power_method(A, X, 3);
+    EigenResult r = power_method(A, X, 3);
+    std::cout << r;
 
     return 0;
+}
+
+EigenResult power_method(std::vector<std::vector<double>> &A, std::vector<std::vector<double>> &X, int iterations) {
+    long double euclidNorm;
+    std::vector<std::vector<double>> x_i, nextX;
+    std::vector<std::vector<double>> y_i;
+    double eigenVApprox = 0;
+    EigenResult result;
+
+    euclidNorm = euclid_norm(X);
+    x_i = (1.0/euclidNorm)*X;
+
+    for (int i = 0; i < iterations; i++) {
+        y_i = A * x_i;
+
+        euclidNorm = euclid_norm(y_i);
+        nextX = (1/euclidNorm)*y_i;
+        eigenVApprox = dot(x_i, y_i);
+        //std::cout << "Eigenvalue approximation: " << eigenVApprox << std::endl;
+        x_i = nextX;
+    }
+    result.eigenvalue = eigenVApprox;
+    result.eigenVector = nextX;
+
+    return result;
 }
 
 double dot(std::vector<std::vector<double>> &m1, std::vector<std::vector<double>> &m2) {
