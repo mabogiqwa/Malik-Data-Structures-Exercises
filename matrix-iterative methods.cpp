@@ -3,7 +3,7 @@
 //a certain error threshold
 //Going to add iterative methods for differential linear systems
 //Need to edit the definition of dot() to allow the computation of the dot
-//product of a column and row vector.
+//product of a column and row vector granted that rows = cols.
 #include <iostream>
 #include <cmath>
 #include <vector>
@@ -92,21 +92,40 @@ EigenResult power_method(std::vector<std::vector<double>> &A, std::vector<std::v
 //Precondition: The passed matrix must be square(rows=cols)
 //Postcondition: The method returns the dominant eigenvalue and associated eigenvector
 
+//Not tested yet
+EigenResult inverse_power_method(std::vector<std::vector<double>> &A, std::vector<std::vector<double>> &X, int iterations) {
+    std::vector<std::vector<double>> x_i = (1/euclid_norm(X))*X;
+    std::vector<std::vector<double>> y_i;
+    std::vector<std::vector<double>> Ax;
+    double yNorm, eigenVApprox;
+    EigenResult r;
+
+    for (int i = 0; i < iterations; i++) {
+        y_i = gauss_seidel(A, x_i, 50);
+        yNorm = euclid_norm(y_i);
+        x_i = (1/yNorm)*y_i;
+        Ax = A *x_i;
+        eigenVApprox = dot(x_i, Ax)/dot(x_i, x_i);
+    }
+    r.eigenvalue = eigenVApprox;
+    r.eigenVector = x_i;
+
+    return r;
+}
+
+
 std::ostream& operator <<(std::ostream &os, EigenResult &result);
-//Postconditon: Prints the contents of the EigenResult object
+//Postcondition: Prints the contents of the EigenResult object
 
 int main()
 {
-    std::vector<std::vector<double>> A = {{2,1},{1,3}};
+    std::vector<std::vector<double>> A = {{2,1,1},{1,2,1},{1,1,2}};
 
-    std::vector<std::vector<double>> b = {{1},{0}};
+    std::vector<std::vector<double>> X = {{1},{-1},{1}};
 
     std::vector<std::vector<double>> w = {{4,1,2},{9,0,3},{2,3,7}};
 
-    std::cout << gauss_seidel(A, b, 50);
-
-    //EigenResult r = power_method(A, X, 3);
-    //std::cout << r;
+    std::cout << pow(A, 6);
 
     return 0;
 }
